@@ -1,0 +1,11 @@
+{
+  "name": "icsify",
+  "version": "0.1.0",
+  "description": "iCal (ics) file generator for sportsmen",
+  "main": "icsify.js",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.15.0",
+    "moment": "^2.15.0"
+  }
+}

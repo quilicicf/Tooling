@@ -1,0 +1,22 @@
+{
+  "-u": {
+    "name": "upstream",
+    "color": "RED",
+    "deleteInstruction": "git push --delete upstream $branchToDelete"
+  },
+  "-o": {
+    "name": "origin",
+    "color": "BLUE",
+    "deleteInstruction": "git push --delete origin $branchToDelete"
+  },
+  "-l": {
+    "name": "local",
+    "color": "GREEN",
+    "deleteInstruction": "git branch -d $branchToDelete"
+  },
+  "-a": {
+    "name": "all",
+    "color": "CYAN",
+    "deleteInstruction": null
+  }
+}
