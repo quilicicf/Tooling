@@ -57,8 +57,9 @@ If that looks good to you, you can use it:
 
 ## Roadmap
 
+- As lots of scripts can contain information about a dev's company, I'm currently working on a way to have a private repository with private scripts that could be plugged to this repository. 
 - A lot of my git flow is implemented already but I find myself limited by bash. I intend to build something much better in a more powerful language.
-- The first item should keep me busy for a long time so I haven't come up with a second yet
+- The second item should keep me busy for a long time so I haven't come up with a second yet
 
 ## Contributions 
 
