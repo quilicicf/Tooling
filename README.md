@@ -3,17 +3,22 @@ My everyday automation
 
 ## What is it ?
 
-A set of bash scripts I use in my day-to-day life. They are separated in modules in different folder/files but a script creates a single bashrc file at the end. 
+It started as a challenge to become self-taught in bash as it's IMO a talent a software engineer MUST have in his toolbox. It's now become a important part of my comfy dev setup and the bash part is not a requirement anymore
+so new languages are going to appear in this project!
+
+This project is a set of bash scripts I use in my day-to-day life. They are separated in modules in different folder/files but a script creates a single bashrc file at the end. 
 I chose to generate the file by hand because I can [shellcheck](https://www.shellcheck.net/) it before and therefore avoid breaking my terminal when I do something wrong.
 
-:warning: It is developped on linux mint 18.1 with no attention given to compatibility on other systems. Parts of this might not work on your system!
+:warning: It is developped on linux mint 18.1 with no attention given to compatibility on other systems. Parts of this might not work on your system! :warning:
 
 ## How to make it work ?
 
 ### Machine-specific settings
 
-All the machine-specific things you might need are available in `0_Machine_Specific.example`. 
+The machine-specific things you might need are available in `0_Machine_Specific.example`. 
 Just copy that file and change its extension to `.sh` then update all the fields to match your machine's configuration.
+
+You might also want to go have a look at `4_Path.sh` which I haven't git-ignored/templated yet.
 
 ### Build
 
@@ -49,3 +54,12 @@ If that looks good to you, you can use it:
 - Launch `promptBuild` which will build the `$PS1`'s value in `~/.config/bash-prompt`
 - Open a new terminal to see the result
 - Enjoy
+
+## Roadmap
+
+- A lot of my git flow is implemented already but I find myself limited by bash. I intend to build something much better in a more powerful language.
+- The first item should keep me busy for a long time so I haven't come up with a second yet
+
+## Contributions 
+
+If this inspires you and you have ideas, find bugs, want more customization to use it on your system or whatever, please contact me via issues.
