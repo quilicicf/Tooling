@@ -1,0 +1,31 @@
+{
+  "default": {
+    "language": "java",
+    "headers": "",
+    "pattern": "$ticketNumber",
+    "nickname": " ",
+    "job": null,
+    "path": null
+  },
+  "Tooling": {
+    "language": "bash",
+    "pattern": "",
+    "nickname": "to",
+    "job": null,
+    "path": "TOOLING"
+  },
+  "Config": {
+    "language": "",
+    "pattern": "",
+    "nickname": "cf",
+    "job": null,
+    "path": "CONFIG"
+  },
+  "Docs": {
+    "language": "md",
+    "pattern": "#$ticketNumber",
+    "nickname": "do",
+    "job": null,
+    "path": "DOCS"
+  }
+}

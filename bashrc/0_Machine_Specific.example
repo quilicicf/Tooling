@@ -1,0 +1,83 @@
+#######################################################
+#######################################################
+##                                                   ##
+## Copy me, edit me and change my extension to .sh.  ##
+##                  Then run brcbuild                ##
+##                                                   ##
+#######################################################
+#######################################################
+
+########################
+#         Paths        #
+########################
+
+export HOME='/home/cyp'
+export DESKTOP=$HOME'/Desktop'
+export WORK=$HOME'/Restlet'
+export FORGE=$WORK'/forge'
+
+export DEFINITIONS=$WORK'/definitions'
+
+export TOOLING=$FORGE'/Tooling'
+export CONFIG=$FORGE'/Config'
+export PRIVATE_TOOLING=$FORGE'/Private_Tooling'
+export BASHRC_DOC=$HOME'/.bashrcDoc'
+
+export APISPARK_WORKSPACE=$WORKSPACES'/as'
+export RESTLET_WORKSPACE=$WORKSPACES'/rf-2.3'
+export RESTLET_AS_WORKSPACE=$WORKSPACES'/rfas'
+
+export RESTLET=$FORGE'/restlet-framework-java'
+export RESTLET_BUILD=$RESTLET'/build'
+
+export RESTLET_AS=$FORGE'/restlet-framework-apispark'
+export RESTLET_AS_BUILD=$RESTLET_AS'/build'
+
+export DHC=$FORGE'/dhc'
+export DHCSVC=$FORGE'/dhc-backend'
+export DEF=$FORGE'/api-definitions'
+export DOCS=$FORGE'/Docs'
+export JSE=$FORGE'/JsonSchemaEditor'
+export DS=$FORGE'/definition-service'
+export COMMON=$FORGE'/common-service'
+export ACCOUNT=$FORGE'/account-service'
+export BILLING=$FORGE'/billing-service'
+export PROJECT=$FORGE'/project-service'
+export TEAM=$FORGE'/team-service'
+export COMPONENTS=$FORGE'/javascript-components'
+
+export APISPARK=$FORGE'/apispark'
+export APISPARK_BUILD=$APISPARK'/build'
+export APISPARK_CONF=$WORK'/config/apispark'
+
+export CONSOLE=$FORGE'/apispark-console'
+export STUDIO=$FORGE'/restlet-studio'
+export PLANS=$FORGE'/restlet-plans'
+export SITES=$FORGE'/restlet-sites'
+
+export BASH_PROMPT_PATH=$HOME'/.config/bash-prompt'
+
+########################
+#       Variables      #
+########################
+
+# Eclipse executable
+export ECLIPSE=$WORK'/eclipse/eclipse'
+
+# WebStorm executable
+export WEBSTORM=$WORK'/webStorm10/bin/webstorm.sh'
+
+# Android studio executable
+export ANDROID_STUDIO="sh $HOME"'/android-studio/app/bin/studio.sh'
+
+# IntelliJ executable
+export INTELLIJ=$WORK'/intelliJ15/bin/idea.sh'
+
+# User's github id
+export GITHUB_ID='quilicicf'
+
+# Prompt appended in PS1
+export FUNNY_PROMPT="%¥©¬¶ǂ😋"
+
+# Final PS1
+export BASH_PROMPT=""

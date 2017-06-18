@@ -1,0 +1,6 @@
+normal,lightgrey,darkgrey,🕚 $(date +%H:%M),true
+normal,white,red, $RET,[ $RET -ne 0 ]
+normal,white,green, ,[ $RET -eq 0 ]
+bold,black,lightyellow, `whoami`,true
+normal,white,cyan,:\w ,true
+normal,white,magenta,$(printGitInformation),[ "$PS12" != "" ]
