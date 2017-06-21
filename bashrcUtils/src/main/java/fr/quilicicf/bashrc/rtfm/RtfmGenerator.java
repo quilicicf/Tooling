@@ -14,7 +14,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static fr.quilicicf.bashrc.BashrcUtils.BASHRC;
 import static fr.quilicicf.bashrc.BashrcUtils.DOC_PATH;
 import static fr.quilicicf.bashrc.BashrcUtils.endProgram;
 import static fr.quilicicf.bashrc.parser.ParserType.DOC;
@@ -25,26 +24,27 @@ import static java.nio.file.Files.newBufferedWriter;
 import static java.nio.file.StandardOpenOption.CREATE;
 
 public class RtfmGenerator extends AbstractBashrcParser {
-    private static Logger LOGGER = LoggerFactory.getLogger(RtfmGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RtfmGenerator.class);
 
     private Stats stats;
 
-    private String beautifyTitleLine(String line) {
+    public RtfmGenerator(final List<Path> sourceFolders) {
+        super(new ParsingState(), sourceFolders);
+    }
+
+    private String beautifyTitleLine(final String line) {
         return line
                 .replaceAll("#", "")
                 .trim()
                 .replaceAll(" ", "_");
     }
 
+    @Override
     public void build() {
         deleteFolderIfExists(DOC_PATH);
         createFolder(DOC_PATH);
 
         stats = new Stats();
-        state = new ParsingState();
-
-        List<Path> allFiles = gatherFiles(BASHRC);
-        List<String> allLines = gatherLines(allFiles, BASHRC);
         stats.setLinesNumber(allLines.size());
 
         allLines.forEach(this::processLine);
@@ -60,65 +60,71 @@ public class RtfmGenerator extends AbstractBashrcParser {
         return DOC;
     }
 
-    protected void processAliasLine(String line) {
+    @Override
+    protected void processAliasLine(final String line) {
         logLineInfo("Alias", line);
         stats.incrementAliasesNumber();
 
-        String name = line.substring(6, line.indexOf('='));
+        final String name = line.substring(6, line.indexOf('='));
         logLineInfo("Alias > name", name);
         state.getCurrentMethodDescription().setName(name);
 
         writeMethod();
     }
 
-    protected void processBeginMethodLine(String line) {
+    @Override
+    protected void processBeginMethodLine(final String line) {
         logLineInfo("Method", line);
         stats.incrementMethodsNumber();
         state.setInMethod(true);
 
-        String name = line.substring(0, line.indexOf('('));
+        final String name = line.substring(0, line.indexOf('('));
         logLineInfo("Method > name", name);
         state.getCurrentMethodDescription().setName(name);
 
         writeMethod();
     }
 
-    protected void processBeginOrEndSubTitleLine(String line) {
+    @Override
+    protected void processBeginOrEndSubTitleLine(final String line) {
         logLineInfo("Begin or end sub-title", line);
         state.toggleInSubTitle();
     }
 
-    protected void processBeginSkipLine(String line) {
+    @Override
+    protected void processBeginSkipLine(final String line) {
         logLineInfo("# !![ ]*", line);
         state.setSkipping(true);
     }
 
-    protected void processBeginTitleLine(String line) {
+    @Override
+    protected void processBeginTitleLine(final String line) {
         logLineInfo("Begin or end title", line);
         state.toggleInFolderTitle();
     }
 
+    @Override
     protected void processCommentLine(String line) {
         logLineInfo("Comment", line);
         line = line.substring(2, line.length());
 
         if (line.startsWith("Uses: ")) {
-            String dependenciesStr = line
+            final String dependenciesStr = line
                     .substring(line.indexOf(":") + 1)
                     .trim();
-            List<String> dependencies = Splitter.on(", ").splitToList(dependenciesStr);
+            final List<String> dependencies = Splitter.on(", ").splitToList(dependenciesStr);
             logLineInfo("Comment > dependencies", dependenciesStr);
             state.getCurrentMethodDescription().setDependencies(dependencies);
 
         } else if (line.matches("\\$[0-9]: .*")) {
-            String parameter = line
+            final String parameter = line
                     .substring(line.indexOf(":") + 1)
                     .trim();
             logLineInfo("Comment > parameter", parameter);
             state.getCurrentMethodDescription().getParameters().add(parameter);
 
         } else if (line.matches("[a-z]: .*")) {
-            String parameter = line
+            final String parameter = line
                     .substring(line.indexOf(":") + 1)
                     .trim();
             logLineInfo("Comment > parameter", parameter);
@@ -130,29 +136,33 @@ public class RtfmGenerator extends AbstractBashrcParser {
         }
     }
 
-    protected void processEndMethodLine(String line) {
+    @Override
+    protected void processEndMethodLine(final String line) {
         logLineInfo("End method", line);
         state.setInMethod(false);
         state.setCurrentMethodDescription(new MethodDescription());
     }
 
-    protected void processExportVariableLine(String line) {
+    @Override
+    protected void processExportVariableLine(final String line) {
         logLineInfo("Variable", line);
         // TODO: deal with variables
     }
 
     @Override
-    protected void processMethodLine(String line) {
+    protected void processMethodLine(final String line) {
         // never called when type = DOC
     }
 
-    protected void processSubTitleLine(String line) {
+    @Override
+    protected void processSubTitleLine(final String line) {
         logLineInfo("Sub-title", line);
         state.setSkipping(false);
         state.setCurrentSection(beautifyTitleLine(line));
     }
 
-    protected void processTitleLine(String line) {
+    @Override
+    protected void processTitleLine(final String line) {
         logLineInfo("Folder title", line);
         state.setSkipping(false);
         state.setCurrentFolder(beautifyTitleLine(line));
@@ -160,7 +170,7 @@ public class RtfmGenerator extends AbstractBashrcParser {
     }
 
     @Override
-    protected void processUnmatchedLine(String line) {
+    protected void processUnmatchedLine(final String line) {
         // Do nothing
 
     }
@@ -168,7 +178,7 @@ public class RtfmGenerator extends AbstractBashrcParser {
     private void writeMethod() {
         // TODO finish (enhance folder creation, see if options exist to create if it does not exist)
         String path = DOC_PATH;
-        MethodDescription methodDescription = state.getCurrentMethodDescription();
+        final MethodDescription methodDescription = state.getCurrentMethodDescription();
 
         if (state.getCurrentFolder() != null) {
             path += "/" + state.getCurrentFolder();
@@ -184,9 +194,9 @@ public class RtfmGenerator extends AbstractBashrcParser {
             }
         }
 
-        String methodName = methodDescription.getName();
+        final String methodName = methodDescription.getName();
         path += "/" + methodName + ".doc";
-        Path doc = Paths.get(path);
+        final Path doc = Paths.get(path);
 
         try (BufferedWriter w = newBufferedWriter(doc, UTF_8, CREATE)) {
 
@@ -194,25 +204,25 @@ public class RtfmGenerator extends AbstractBashrcParser {
             w.write("  " + methodDescription.getDescription() + "\n\n");
 
             w.write("### _Parameters_\n\n");
-            List<String> parameters = methodDescription.getParameters();
+            final List<String> parameters = methodDescription.getParameters();
             if (parameters.isEmpty()) {
                 w.write("\tNone\n");
             }
-            for (String parameter : parameters) {
+            for (final String parameter : parameters) {
                 w.write("  1. " + parameter + "\n");
             }
             w.write("\n");
 
             w.write("### _Dependencies_\n\n");
-            List<String> dependencies = methodDescription.getDependencies();
+            final List<String> dependencies = methodDescription.getDependencies();
             if (dependencies.isEmpty()) {
                 w.write("\tNone\n");
             }
-            for (String dependency : dependencies) {
+            for (final String dependency : dependencies) {
                 w.write("  - " + dependency + "\n");
             }
             w.write("\n");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             endProgram(
                     format("Impossible to open a writer for file: '%s' because of %s",
                             doc, e.getClass().getSimpleName()));

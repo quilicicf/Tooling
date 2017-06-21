@@ -97,7 +97,7 @@ brcbuild() {
   current_version="$(<"$BASHRC_UTILS/version.txt")"
   local jar="$BASHRC_UTILS/target/bashrcUtils-$current_version-jar-with-dependencies.jar"
 
-  [ -f "$jar" ] || {
+  test -f "$jar" || {
     pushd "$TOOLING/bashrcUtils"
     printfc "Jar not found, building it for version $current_version\n" "$CYAN"
     mvn clean assembly:assembly "-Drevision=$current_version" || {
@@ -108,5 +108,5 @@ brcbuild() {
   }
 
   printfc "Building with bashrcUtils version $current_version\n" "$CYAN"
-  javar "$jar" -p "$BASHRC" build rtfm "$@"
+  javar "$jar" -p "$BASHRC" -s "$PRIVATE_TOOLING/bashrc" build rtfm "$@"
 }
