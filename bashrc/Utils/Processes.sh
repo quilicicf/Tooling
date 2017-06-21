@@ -66,9 +66,9 @@ killbyname() {
 # Uses: _signalResult
 signalResult() {
   if [ "${PIPESTATUS[0]}" -eq 0 ]; then
-      _signalResult "$PRIVATE_TOOLING/alarm.mp3" "$GREEN" 'Process SUCCEEDED, you beautiful madafaka!'
+      _signalResult "$PRIVATE_TOOLING/sounds/alarm.mp3" "$GREEN" 'Process SUCCEEDED, you beautiful madafaka!'
   else
-      _signalResult "$PRIVATE_TOOLING/fail.mp3" "$RED" 'Process FAILED, loser!'
+      _signalResult "$PRIVATE_TOOLING/sounds/fail.mp3" "$RED" 'Process FAILED, loser!'
   fi
 }
 

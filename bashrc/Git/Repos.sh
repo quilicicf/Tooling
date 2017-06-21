@@ -5,6 +5,11 @@
 export REPOS_CONFIG
 REPOS_CONFIG="$(jqcr '.' <  "$BASHRC/Git/repos.json")"
 
+test -f "$PRIVATE_TOOLING/bashrc/Git/repos.json" && {
+  REPOS_CONFIG="$(jqcr -s '.[0] * .[1]' "$TOOLING/bashrc/Git/repos.json" "$PRIVATE_TOOLING/bashrc/Git/repos.json")"
+}
+
+
 # Jump to a repo
 # $1: nickname of the repo to jump to
 j() {
