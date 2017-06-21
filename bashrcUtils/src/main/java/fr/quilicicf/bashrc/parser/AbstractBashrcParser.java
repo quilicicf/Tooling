@@ -112,10 +112,6 @@ public abstract class AbstractBashrcParser {
     }
 
     private List<String> gatherLines(final List<Path> allFiles) {
-        allFiles
-                .stream()
-                .map(Path::toString)
-                .forEach(System.out::println);
         allFiles.sort(Comparator.comparing(o -> o.toAbsolutePath().toString()));
 
         final List<String> allLines = new ArrayList<>();
