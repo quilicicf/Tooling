@@ -55,9 +55,16 @@ If that looks good to you, you can use it:
 - Open a new terminal to see the result
 - Enjoy
 
+## Private methods and repositories
+
+As lots of scripts can contain information about a dev's company that should not get public, there's a way to put all your private files in a private repository and still include them in the final file.
+
+To do that, export a variable `PRIVATE_TOOLING` in the file `0_Machine_Specific.sh` set to the path of your private repository. Put all the files that should be added to your bashrc in a folder `bashrc` in that repository and launch `brcbuild` again. 
+
+To add private repositories to the list of your public ones, add them by copying the structure of the file in `bashrc/Git/repos.json` into your private repository: `$PRIVATE_TOOLING/bashrc/Git/repos.json`. 
+
 ## Roadmap
 
-- As lots of scripts can contain information about a dev's company, I'm currently working on a way to have a private repository with private scripts that could be plugged to this repository. 
 - A lot of my git flow is implemented already but I find myself limited by bash. I intend to build something much better in a more powerful language.
 - The second item should keep me busy for a long time so I haven't come up with a second yet
 
