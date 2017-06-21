@@ -66,7 +66,7 @@ To add private repositories to the list of your public ones, add them by copying
 ## Roadmap
 
 - A lot of my git flow is implemented already but I find myself limited by bash. I intend to build something much better in a more powerful language.
-- The second item should keep me busy for a long time so I haven't come up with a second yet
+- The previous item should keep me busy for a long time so I haven't come up with a second yet
 
 ## Contributions 
 
