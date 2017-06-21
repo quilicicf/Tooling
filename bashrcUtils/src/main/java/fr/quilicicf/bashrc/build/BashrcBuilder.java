@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import static fr.quilicicf.bashrc.BashrcUtils.BASHRC;
 import static fr.quilicicf.bashrc.BashrcUtils.BASHRC_REFINED;
 import static fr.quilicicf.bashrc.BashrcUtils.endProgram;
 import static java.lang.String.format;
@@ -24,15 +23,17 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class BashrcBuilder extends AbstractBashrcParser {
-    private static Logger LOGGER = getLogger(BashrcBuilder.class);
+    private static final Logger LOGGER = getLogger(BashrcBuilder.class);
 
-    private List<String> parsedLines = new ArrayList<>();
+    private final List<String> parsedLines = new ArrayList<>();
+
+    public BashrcBuilder(final List<Path> sourceFolders) {
+        super(new ParsingState(), sourceFolders);
+    }
 
     @Override
     public void build() {
         state = new ParsingState();
-        List<Path> allFiles = gatherFiles(BASHRC);
-        List<String> allLines = gatherLines(allFiles, BASHRC);
 
         allLines.forEach(this::processLine);
 
@@ -46,59 +47,59 @@ public class BashrcBuilder extends AbstractBashrcParser {
     }
 
     @Override
-    protected void processAliasLine(String line) {
+    protected void processAliasLine(final String line) {
         parsedLines.add(line);
     }
 
     @Override
-    protected void processBeginMethodLine(String line) {
+    protected void processBeginMethodLine(final String line) {
         parsedLines.add(line);
         state.setInMethod(true);
     }
 
     @Override
-    protected void processBeginOrEndSubTitleLine(String line) {
+    protected void processBeginOrEndSubTitleLine(final String line) {
         // Do nothing
     }
 
     @Override
-    protected void processBeginSkipLine(String line) {
+    protected void processBeginSkipLine(final String line) {
         // Do nothing
     }
 
     @Override
-    protected void processBeginTitleLine(String line) {
+    protected void processBeginTitleLine(final String line) {
         // Do nothing
     }
 
     @Override
-    protected void processCommentLine(String line) {
+    protected void processCommentLine(final String line) {
         // Do nothing
     }
 
     @Override
-    protected void processEndMethodLine(String line) {
+    protected void processEndMethodLine(final String line) {
         parsedLines.add(line);
         state.setInMethod(false);
     }
 
     @Override
-    protected void processExportVariableLine(String line) {
+    protected void processExportVariableLine(final String line) {
         parsedLines.add(line);
     }
 
     @Override
-    protected void processMethodLine(String line) {
+    protected void processMethodLine(final String line) {
         parsedLines.add(line);
     }
 
     @Override
-    protected void processSubTitleLine(String line) {
+    protected void processSubTitleLine(final String line) {
         // Do nothing
     }
 
     @Override
-    protected void processTitleLine(String line) {
+    protected void processTitleLine(final String line) {
         // Do nothing
     }
 
@@ -106,7 +107,7 @@ public class BashrcBuilder extends AbstractBashrcParser {
         if (exists(BASHRC_REFINED)) {
             try {
                 delete(BASHRC_REFINED);
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 // Do nothing
             }
         }
@@ -114,7 +115,7 @@ public class BashrcBuilder extends AbstractBashrcParser {
         try (BufferedWriter w = newBufferedWriter(BASHRC_REFINED, UTF_8, CREATE_NEW)) {
 
             w.write(Joiner.on("\n").join(parsedLines));
-        } catch (Exception e) {
+        } catch (final Exception e) {
             endProgram(
                     format("Impossible to open a writer for file: '%s' because of %s",
                             BASHRC_REFINED, e.getClass().getSimpleName()));
@@ -122,7 +123,7 @@ public class BashrcBuilder extends AbstractBashrcParser {
     }
 
     @Override
-    protected void processUnmatchedLine(String line) {
+    protected void processUnmatchedLine(final String line) {
         parsedLines.add(line);
     }
 
