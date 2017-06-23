@@ -237,10 +237,11 @@ gpr() {
 }
 
 _prTitleChoices() {
-  local title choice
+  local title escapedTitle choice
   local choices='[]'
   while read -r title; do
-    local choice=$(jsonSet '.label' "$title" 'string' <<< '{}' | jsonSet '.value' "$title" 'string')
+    escapedTitle="${title//\"/\\\"}"
+    choice=$(jsonSet '.label' "$escapedTitle" 'string' <<< '{}' | jsonSet '.value' "$escapedTitle" 'string')
     choices="$(jsonSet '.' "$choice" <<< "$choices")"
   done <<< "$(git lm -10)"
 
