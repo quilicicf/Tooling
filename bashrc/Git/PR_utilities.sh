@@ -191,7 +191,7 @@ gpr() {
   result="$(curl -X POST \
      -H "Content-Type:application/json" \
      -H "Accept:application/json" \
-     -H "Authorization:Bearer $GITHUB_TOKEN" \
+     -H "Authorization:Bearer $(<"$PRIVATE_TOOLING/pr.tkn")" \
      -d \
   "{
     \"title\": \"$title\",
@@ -246,19 +246,4 @@ _prTitleChoices() {
   done <<< "$(git lm -10)"
 
   printf '%s' "$choices"
-}
-
-# Opens jenkins page to launch an automated test suite. Copies the current branche's name to the clipboard so that one just has to copy it in jenkins.
-# Uses: cpb, xo, repoJob, isNotNull
-gjenks() {
-  local repoJob
-  cpb
-  repoJob="$(repoJob)"
-
-  if isNotNull "$repoJob"; then
-    xo "$repoJob"
-  else
-    echo "No job configured for this repository"
-    return 1
-  fi
 }

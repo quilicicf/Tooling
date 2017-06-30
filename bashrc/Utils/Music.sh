@@ -4,16 +4,12 @@
 
 # These utilities work with a simple API hosted on cloud.restlet.com which I haven't open-sourced yet.
 
-export MUSIC_LOGIN MUSIC_PASSWORD
 export MUSIC_FILE="$PRIVATE_TOOLING/music.json"
 
 test -f "$MUSIC_FILE" || {
   colorize "Please type your API credentials in $MUSIC_FILE" "$RED"
-  printf '{\n  ".login": "",\n  "password": ""\n}\n' > "$MUSIC_FILE"
+  printf '{\n  "login": "",\n  "password": ""\n}\n' > "$MUSIC_FILE"
 }
-
-MUSIC_LOGIN="$(jsonGet '.login' < "$MUSIC_FILE")"
-MUSIC_PASSWORD="$(jsonGet '.password' < "$MUSIC_FILE")"
 
 # Adds a new song in the list of songs I like. Songs can be passed via a '-' separated input or the named attributes below.
 # Uses: params module, JSON module, $PRIVATE_TOOLING/music.json
@@ -33,7 +29,7 @@ musicAdd() {
    fi
 
   curl -sS -X POST \
-    -u "$MUSIC_LOGIN:$MUSIC_PASSWORD" \
+    -u "$(jsonGet '.login' < "$MUSIC_FILE"):$(jsonGet '.password' < "$MUSIC_FILE")" \
     -H 'Content-Type:application/json' \
     -H 'Accept:application/json' \
     -d "{\"artist\": \"$artist\", \"name\": \"$name\"}" \
@@ -51,7 +47,7 @@ musicRead() {
   local lines artist name id
   lines="$(\
     curl -sS \
-    -u "$MUSIC_LOGIN:$MUSIC_PASSWORD" \
+    -u "$(jsonGet '.login' < "$MUSIC_FILE"):$(jsonGet '.password' < "$MUSIC_FILE")" \
     -H 'Accept:application/json' \
     'https://rsmymusic.apispark.net/v1/songs' \
     | jqcr '.[]' \
