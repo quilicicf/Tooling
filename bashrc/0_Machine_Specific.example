@@ -18,6 +18,7 @@ export WORK=$HOME'/Restlet'
 export FORGE=$WORK'/forge'
 
 export TOOLING=$FORGE'/Tooling'
+export BASHRC=$TOOLING'/bashrc'
 export PRIVATE_TOOLING=$FORGE'/Private_Tooling'
 export BASHRC_DOC=$HOME'/.bashrcDoc'
 
