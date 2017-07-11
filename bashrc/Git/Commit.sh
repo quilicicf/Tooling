@@ -41,25 +41,10 @@ gcm() {
   git commit -m "$message" "$@"
 }
 
-# Commits the currents staged changes with a commit message that gets prefix and suffix from latest commit and
-# set the content to: code review comments
+# Commits the current staged changes with generic commit message ':eyes: Code review'
+# Uses: gcm
 gcrc() {
-  local oldMessage shortMessage ticketNumber
-  oldMessage="$(git lm | head -1)"
-  local regex='((fix|feat|test|chore|refactor)\([^(]+\): )?[^(]+(\([A-Z]+\-[0-9]+\))?'
-
-  extract "$oldMessage" "$regex" '1' 2> /dev/null && {
-    shortMessage="$(jsonGet '.gcrc' <<< "$EXTRACTED")"
-  }
-
-  if extract "$oldMessage" "$regex" '3' 2> /dev/null; then
-    ticketNumber="$(jsonGet '.gcrc' <<< "$EXTRACTED")"
-    git commit -m "${shortMessage}code review comments $ticketNumber"
-
-  else
-    git commit -m "${shortMessage}code review comments"
-
-  fi
+  gcm ":eyes: Code review"
 }
 
 # Same as gcm above but allows to provide a ticket number
