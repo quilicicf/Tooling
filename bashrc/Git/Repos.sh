@@ -2,7 +2,7 @@
 #    Repos    #
 #-------------#
 
-export REPOS_CONFIG
+export REPOS_CONFIG REPO_NAMES
 REPOS_CONFIG="$(jqcr '.' <  "$BASHRC/Git/repos.json")"
 
 test -f "$PRIVATE_TOOLING/bashrc/Git/repos.json" && {
@@ -11,31 +11,29 @@ test -f "$PRIVATE_TOOLING/bashrc/Git/repos.json" && {
 
 
 # Jump to a repo
-# $1: nickname of the repo to jump to
+# $1: search string for the repo
 j() {
-  local repo path
-  repo="$(_getRepoFromNickName "${1?Missing nickname at index 1}")"
-  path="$(jsonGet '.path' <<< "$repo")"
+  local search="${1?Missing search}"
+  local results resultsSize choices repos
+  repos="$(find "$FORGE" -maxdepth 1 -printf '%f\n' | jq -R -s -c 'split("\n")')"
 
-  if isNull "$path"; then
-    echo "No path found"
+  results="$(jqn "filter(name => name.toLowerCase().includes('$search'))" <<< "$repos")"
+  resultsSize="$(jqn --color=false "size" <<< "$results")"
+
+  if [[ "$resultsSize" -gt 1 ]]; then
+    choices="$(jqn --color=false 'map(name => { return { label: name, value: name }; })' <<< "$results")"
+    intChoose "$choices"
+    isNull "$INTERACTIVE_CHOICE" && { echo "Operation aborted"; return 0; }
+    cd "$FORGE/$INTERACTIVE_CHOICE"
+
+  elif [[ "$resultsSize" = "0" ]]; then
+    printf 'No repository matching your search. Check the search and the repos.\n'
     return 1
-  else
-    cd "${!path}"
-  fi
-}
 
-# Retrieves the repository name from its nickname
-# $1: The nickname of the repo
-_getRepoFromNickName() {
-  local nickname="${1?Missing nickname}"
-  jsonValues "$REPOS_CONFIG" | while read -r repo; do
-    if [ "$nickname" = "$(jsonGet '.nickname' <<< "$repo")" ]; then
-      echo "$repo"
-      return 0
-    fi
-  done
-  return 1
+  else
+    cd "$(jqn "first | repoName => \"$FORGE/\" + repoName" <<< "$results")"
+
+  fi
 }
 
 # Adds the headers defined in the file repos.headers to each class of the repo.
