@@ -3,29 +3,33 @@
     "language": "java",
     "headers": "",
     "pattern": "$ticketNumber",
-    "nickname": " ",
-    "job": null,
-    "path": null
+    "job": null
   },
   "Tooling": {
     "language": "bash",
     "pattern": "",
-    "nickname": "to",
     "job": null,
-    "path": "TOOLING"
+    "realName": "Tooling"
+  },
+  "Private_Tooling": {
+    "language": "bash",
+    "pattern": "",
+    "job": null
   },
   "Config": {
     "language": "",
     "pattern": "",
-    "nickname": "cf",
     "job": null,
-    "path": "CONFIG"
+    "realName": "Config"
   },
   "Docs": {
     "language": "md",
     "pattern": "#$ticketNumber",
-    "nickname": "do",
-    "job": null,
-    "path": "DOCS"
+    "job": null
+  },
+  "UT_app": {
+    "language": "js",
+    "pattern": "",
+    "job": null
   }
 }
