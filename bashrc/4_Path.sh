@@ -11,14 +11,14 @@ export PATH="$PATH:/usr/bin/node"
 # Maven
 export PATH="$PATH:$MAVEN/bin"
 
-# NPM
-_configureNpm() {
-  local NODE_MODULES="$HOME/.npm"
-  local NPM_PACKAGES="$HOME/.npm-global/bin"
-  export NPM_CONFIG_PREFIX="$HOME/.npm-global"
-  export PATH=$PATH:$HOME/bin:$NODE_MODULES:$NPM_PACKAGES
+# NVM
+export NVM_DIR="$HOME/.nvm"
+_configureNvm() {
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 }
-_configureNpm
+
+_configureNvm
 
 # rbenv
 # export PATH="$HOME/.rbenv/bin:$PATH"
