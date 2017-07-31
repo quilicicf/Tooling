@@ -2,6 +2,18 @@
 # PR utilities #
 #--------------#
 
+export PR_SETTINGS='{"defaultChannel": "general"}'
+export PR_SETTINGS_FILE="$TOOLING/bashrc/Git/pr.json"
+
+if test -f "$PR_SETTINGS_FILE"; then
+  PR_SETTINGS="$(jqcr '.' < "$PR_SETTINGS_FILE")"
+else
+  colorize "A configuration file has been created for the PR feature at " "$YELLOW"
+  colorize "$PR_SETTINGS_FILE\n" "$CYAN"
+  colorize "Feel free to update it to your wishes.\n" "$YELLOW"
+  jq <<< "$PR_SETTINGS" > "$PR_SETTINGS_FILE"
+fi
+
 # Parses all the feature's commits to find omissions. Each repo has a different script
 # Uses: repoLanguage, gdn, gprfc, $repo.awk files, gin
 # $1: the optional number of commits to rewind
@@ -204,15 +216,16 @@ gpr() {
     jq -r ".html_url" <<< "$result" | cbs
     xo "$(cbo)"
 
-    local message channel shouldPost shouldLanuchBuild
+    local message defaultChannel channel shouldPost shouldLaunchBuild
 
     printf 'Post a message on slack (y/n): '
     read shouldPost
     [ "$shouldPost" = 'n' ] && { return 0; }
 
-    printf 'Which channel sir (default: dev-dhc): '
+    defaultChannel="$(jqcr '.defaultChannel' <<< "$PR_SETTINGS_FILE")"
+    printf 'Which channel sir (default: %s): ' "$defaultChannel"
     read channel
-    [ -z "$channel" ] && { channel='dev-dhc'; }
+    [ -z "$channel" ] && { channel="$defaultChannel"; }
 
     printf 'Which message sir (default: same as PR): '
     read message
@@ -222,8 +235,8 @@ gpr() {
     > /dev/null
 
     printf 'Launch a build ? (y/n): '
-    read shouldLanuchBuild
-    [ "$shouldLanuchBuild" = 'y' ] && { gjenks; }
+    read shouldLaunchBuild
+    [ "$shouldLaunchBuild" = 'y' ] && { gjenks; }
 
   elif isTrue "$(jq 'has("errors")' <<< "$result")"; then
     printf '\n%s\n' "$(jq -r '.errors[0].message' <<< "$result")"
