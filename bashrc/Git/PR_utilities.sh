@@ -222,7 +222,7 @@ gpr() {
     read shouldPost
     [ "$shouldPost" = 'n' ] && { return 0; }
 
-    defaultChannel="$(jqcr '.defaultChannel' <<< "$PR_SETTINGS_FILE")"
+    defaultChannel="$(jqcr '.defaultChannel' <<< "$PR_SETTINGS")"
     printf 'Which channel sir (default: %s): ' "$defaultChannel"
     read channel
     [ -z "$channel" ] && { channel="$defaultChannel"; }
