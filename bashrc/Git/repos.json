@@ -2,34 +2,53 @@
   "default": {
     "language": "java",
     "headers": "",
-    "pattern": "$ticketNumber",
-    "job": null
+    "job": null,
+    "issueTracker": "github",
+    "github": {
+      "ticketNumberPattern": "$ticketNumber"
+    }
   },
   "Tooling": {
     "language": "bash",
-    "pattern": "",
     "job": null,
-    "realName": "Tooling"
+    "realName": "Tooling",
+    "issueTracker": "github",
+    "github": {
+      "ticketNumberPattern": ""
+    }
   },
   "Private_Tooling": {
     "language": "bash",
-    "pattern": "",
-    "job": null
+    "job": null,
+    "issueTracker": "github",
+    "github": {
+      "ticketNumberPattern": ""
+    }
   },
   "Config": {
     "language": "",
-    "pattern": "",
     "job": null,
-    "realName": "Config"
+    "realName": "Config",
+    "issueTracker": "github",
+    "github": {
+      "ticketNumberPattern": ""
+    }
   },
   "Docs": {
     "language": "md",
-    "pattern": "#$ticketNumber",
-    "job": null
+    "job": null,
+    "issueTracker": "github",
+    "github": {
+      "ticketNumberPattern": "#$ticketNumber"
+    }
   },
   "UT_app": {
     "language": "js",
     "pattern": "",
-    "job": null
+    "job": null,
+    "issueTracker": "github",
+    "github": {
+      "ticketNumberPattern": ""
+    }
   }
 }
