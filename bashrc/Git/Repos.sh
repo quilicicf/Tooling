@@ -14,24 +14,23 @@ test -f "$PRIVATE_TOOLING/bashrc/Git/repos.json" && {
 # $1: search string for the repo
 j() {
   local search="${1?Missing search}"
-  local results resultsSize choices repos
+  local choices repos
   repos="$(find "$FORGE" -maxdepth 1 -printf '%f\n' | jq -R -s -c 'split("\n")')"
 
-  results="$(jqn "filter(name => name.toLowerCase().includes('$search'))" <<< "$repos")"
-  resultsSize="$(jqn --color=false "size" <<< "$results")"
+  choices="$(jqn --color=false "filter(name => /$search/.test(name.toLowerCase())) | map(name => { return { label: name, value: name }; })" <<< "$repos")"
+  choicesSize="$(jqcr 'length' <<< "$choices")"
 
-  if [[ "$resultsSize" -gt 1 ]]; then
-    choices="$(jqn --color=false 'map(name => { return { label: name, value: name }; })' <<< "$results")"
+  if [[ "$choicesSize" -gt 1 ]]; then
     intChoose "$choices"
     isNull "$INTERACTIVE_CHOICE" && { echo "Operation aborted"; return 0; }
     cd "$FORGE/$INTERACTIVE_CHOICE"
 
-  elif [[ "$resultsSize" = "0" ]]; then
+  elif [[ "$choicesSize" = "0" ]]; then
     printf 'No repository matching your search. Check the search and the repos.\n'
     return 1
 
   else
-    cd "$(jqn "first | repoName => \"$FORGE/\" + repoName" <<< "$results")"
+    cd "$FORGE/$(jqcr "first | .value" <<< "$choices")"
 
   fi
 }
