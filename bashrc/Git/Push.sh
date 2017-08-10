@@ -57,6 +57,13 @@ gps() {
   git push --set-upstream "$remote" "$(git_branch_simple)"
 }
 
+# Creates a code review comments commit and pushes it to specified remote
+# Uses: gcrc, gps
+# $1: The remote's nickname, see remotes.json for options (Default: -o for origin)
+gpsrc() {
+  gcrc; gps "$@"
+}
+
 # Pushes tags to given remote
 # Uses: gRemote
 gpst() {
