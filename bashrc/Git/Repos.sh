@@ -35,6 +35,13 @@ j() {
   fi
 }
 
+# Jumpt to a repo
+# The full name of the repo
+# Uses: j
+jw() {
+  j "^$1$"
+}
+
 # Adds the headers defined in the file repos.headers to each class of the repo.
 # Currently, it only works with java repos !
 # Uses: repoHeaders, repoLocalPath
