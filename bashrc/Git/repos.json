@@ -5,17 +5,6 @@
     "pattern": "$ticketNumber",
     "job": null
   },
-  "Tooling": {
-    "language": "bash",
-    "pattern": "",
-    "job": null,
-    "realName": "Tooling"
-  },
-  "Private_Tooling": {
-    "language": "bash",
-    "pattern": "",
-    "job": null
-  },
   "Config": {
     "language": "",
     "pattern": "",
@@ -26,6 +15,22 @@
     "language": "md",
     "pattern": "#$ticketNumber",
     "job": null
+  },
+  "Gut": {
+    "language": "js",
+    "pattern": "#$ticketNumber",
+    "job": null
+  },
+  "Private_Tooling": {
+    "language": "bash",
+    "pattern": "",
+    "job": null
+  },
+  "Tooling": {
+    "language": "bash",
+    "pattern": "",
+    "job": null,
+    "realName": "Tooling"
   },
   "UT_app": {
     "language": "js",
