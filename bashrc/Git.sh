@@ -2,7 +2,7 @@
 #   Git configuration  #
 ########################
 
-if test -f "$FORGE/bash-git-prompt/gitprompt.sh"; then
+if test -f "$FORGE/github/quilicicf/bash-git-prompt/gitprompt.sh"; then
   . "$_";
   export GIT_PROMPT_THEME="Splendid";
   export GIT_PS1_SHOWDIRTYSTATE=true
@@ -14,7 +14,7 @@ fi
 
 test -f "$FORGE/bash-git-prompt/git-prompt-help.sh" && . "$_"
 
-if test -f "$FORGE/git/contrib/completion/git-completion.bash"; then
+if test -f "$FORGE/github/git/git/contrib/completion/git-completion.bash"; then
   . "$_"
 elif isLogModeOn; then
   colorize "Please clone git/git in $FORGE, otherwise, git completion and git prompt will be broken." "$RED"
