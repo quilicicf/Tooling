@@ -231,7 +231,7 @@ gpr() {
     read message
     [ -z "$message" ] && { message="PR pour $title"; }
 
-    curl -X POST --data-urlencode "payload={\"channel\": \"#$channel\", \"username\": \"cyp\", \"text\": \"$message: $(cbo)\", \"icon_emoji\": \":nazi_mustache:\"}" ***REMOVED*** \
+    curl -X POST --data-urlencode "payload={\"channel\": \"#$channel\", \"username\": \"cyp\", \"text\": \"$message: $(cbo)\", \"icon_emoji\": \":corsica:\"}" ***REMOVED*** \
     > /dev/null
 
     printf 'Launch a build ? (y/n): '
