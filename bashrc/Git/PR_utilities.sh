@@ -231,7 +231,7 @@ gpr() {
     read message
     [ -z "$message" ] && { message="PR pour $title"; }
 
-    curl -X POST --data-urlencode "payload={\"channel\": \"#$channel\", \"username\": \"cyp\", \"text\": \"$message: $(cbo)\", \"icon_emoji\": \":nazi_mustache:\"}" https://hooks.slack.com/services/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 \
+    curl -X POST --data-urlencode "payload={\"channel\": \"#$channel\", \"username\": \"cyp\", \"text\": \"$message: $(cbo)\", \"icon_emoji\": \":corsica:\"}" https://hooks.slack.com/services/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 \
     > /dev/null
 
     printf 'Launch a build ? (y/n): '
