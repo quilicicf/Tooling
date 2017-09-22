@@ -81,12 +81,6 @@ gbe() {
   fi
 }
 
-# Pops to last visited branch
-# Uses: git
-popb() {
-  git checkout -
-}
-
 # Copies the current git branch to the clipboard.
 # Uses: git_branch_simple, cb
 cpb() {
