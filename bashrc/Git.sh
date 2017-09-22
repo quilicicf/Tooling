@@ -25,3 +25,19 @@ test -f "$FORGE/git/contrib/completion/git-prompt.sh" && . "$_"
 git_branch_simple() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
 }
+
+#####################
+# Gut configuration #
+#####################
+
+# Installation of Gut scripts, see https://github.com/quilicicf/Gut/blob/master/specs/specs.md#shell-features
+# If the link is broken, you probably want to read the README again https://github.com/quilicicf/Gut/blob/master/README.md
+installGutScripts() {
+  local script
+  test -d ~/.config/gut && {
+    while read script; do
+      . "$script"
+    done <<< "$(find ~/.config/gut -name '*.sh')"
+  }
+}
+installGutScripts
