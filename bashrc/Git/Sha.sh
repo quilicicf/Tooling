@@ -28,8 +28,8 @@ _gshn() {
   isNull "$format" && { format='ll'; }
 
   if isTrue "$(jqcr '.r' <<< "$params")"; then
-    printf '%s\n' "$(git "$format" "-$n" HEAD)" | tac
+    git "$format" "-$n" HEAD | tac
   else
-    printf '%s\n' "$(git "$format" "-$n" HEAD)"
+    git "$format" "-$n" HEAD
   fi
 }
