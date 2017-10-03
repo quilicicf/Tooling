@@ -12,11 +12,12 @@ test -f "$JENKINS_FILE" || {
 # Launches a local copy of Jenkins 2
 jenkins() {
   local logFile
-  logFile"$(mktemp -t "jenkins_logs_X_$(date +"%Y_%m_%dT%H_%M_%S")")"
+  logFile="$(mktemp -t "jenkins_logs_XXX_$(date +"%Y_%m_%dT%H_%M_%S")")"
 
   printf 'Log file is: %b%s%b\n' "$CYAN" "$logFile" "$DEFAULT"
   pushd "$WORK"
-    nohup java -jar jenkins.war > "$logFile" 2>&1
+    nohup java -jar jenkins.war > "$logFile" 2>&1 &
+    xo http://localhost:8080
   popd
 }
 
