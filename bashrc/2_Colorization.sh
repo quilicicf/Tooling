@@ -19,7 +19,7 @@ export LIGHTRED='\e[0;91m'
 export LIGHTPURPLE='\e[0;95m'
 export YELLOW='\e[0;33m'
 export WHITE='\e[0;37m'
-export DEFAULT='\e[0;39m'
+export DEFAULT='\e[0m'
 
 export shellColors
 shellColors=$(cat "$TOOLING/bash-prompt/colors")
