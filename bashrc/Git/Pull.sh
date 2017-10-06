@@ -42,7 +42,7 @@ garb() {
   local motherBranch remoteNickName
   motherBranch=$(mergeTo "$1")
   remoteNickName="${2:--o}"
-  git checkout "$motherBranch"
+  pushb "$motherBranch"
   gfrb "$remoteNickName"
   popb
   git rebase "$motherBranch"
