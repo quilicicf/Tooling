@@ -102,3 +102,18 @@ gbf() {
   branch="$(git_branch_simple)"
   echo "$branch" | awk -F '[_]' '{ print $1"_"$2 }'
 }
+
+# Recreate the current branch by deleting it and re-creating it on top of the given branch.
+# A pull is done on the branch to make sure it's up-to-date
+# Uses: gco, gfrb, gbd, gcob
+# $1: the branch on which to re-create the current branch
+grbh() {
+  local branchOnWhichToRebase="${1?Specify on which branch the current branch should be recreated}"
+  local currentBranch
+  currentBranch="$(git_branch_simple)"
+
+  gco "$branchOnWhichToRebase"
+  gfrb
+  gbd "$currentBranch"
+  gcob "$currentBranch"
+}
