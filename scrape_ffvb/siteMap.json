@@ -1,14 +1,13 @@
 {
-  "startUrl": "http://www.ffvbbeach.org/ffvbapp/resu/vbspo_calendrier.php?saison=2016/2017&codent=ABCCS&poule=3MH",
-  "selectors": [
-    {
+  "startUrl": "http://www.ffvbbeach.org/ffvbapp/resu/vbspo_calendrier.php?saison=2017%2F2018&codent=ABCCS&poule=3MH&division=&tour=&calend=COMPLET&x=10&y=8",
+  "selectors": [{
       "parentSelectors": [
         "line"
       ],
       "type": "SelectorText",
       "multiple": false,
       "id": "time",
-      "selector": "td.liengris_pt:nth-of-type(3)",
+      "selector": "td:nth-of-type(3)",
       "regex": "",
       "delay": ""
     },
@@ -19,7 +18,7 @@
       "type": "SelectorText",
       "multiple": false,
       "id": "teamB",
-      "selector": "td.lienquestion_pt:nth-of-type(6)",
+      "selector": "td:nth-of-type(6)",
       "regex": "",
       "delay": ""
     },
@@ -40,7 +39,7 @@
       "type": "SelectorText",
       "multiple": false,
       "id": "date",
-      "selector": "td.liengris_pt:nth-of-type(2)",
+      "selector": "td:nth-of-type(2)",
       "regex": "",
       "delay": ""
     },
@@ -51,7 +50,7 @@
       "type": "SelectorText",
       "multiple": false,
       "id": "teamA",
-      "selector": "td.lienquestion_pt:nth-of-type(4)",
+      "selector": "td:nth-of-type(4)",
       "regex": "",
       "delay": ""
     },
@@ -62,10 +61,10 @@
       "type": "SelectorText",
       "multiple": false,
       "id": "gymnasium",
-      "selector": "td.liengris_pt:nth-of-type(8)",
+      "selector": "td:nth-of-type(8)",
       "regex": "",
       "delay": ""
     }
   ],
-  "_id": "ffvb_16_17"
+  "_id": "ffvb_17_18"
 }

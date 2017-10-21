@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /*
 * This is a bit of code I use to scrape the French volleyball's federation website to get the calendar of my matches.
 * It then uses an nodeJS package I've written to create an iCal calendar with all the matches of the year in it.
@@ -6,71 +8,52 @@
 * into web scraper and change it to match your division.
 */
 
-module.exports = (function () {
-  'use strict';
+const _ = require('lodash');
+const fs = require('fs');
+const moment = require('moment');
 
-  var fs = require('fs');
-  var ics = require('../../ics/index.js');
-  var moment = require('moment');
-  var _ = require('lodash');
+const ics = require('../../js2ics/index.js');
 
-  var asbTeamName = 'ASB REZE VOLLEY 2';
-  var dateFormat = 'YYYYMMDDTHHmm';
-
-  var icsify, dump, reformatEntry;
-
-  reformatEntry = function (entry) {
-    var reformatted = {};
-    var ennemyTeam = entry.teamA === asbTeamName
+const reformatEntry = (teamName, entry) => {
+  const reformatted = {};
+  const enemyTeam = entry.teamA === teamName
     ? entry.teamB
     : entry.teamA;
-    reformatted.eventName = 'Match contre ' + ennemyTeam;
+  reformatted.eventName = 'Match contre ' + enemyTeam;
 
-    var splitDate = _.split(entry.date, '/');
-    var beginingHour = _.split(entry.time, ':')[0];
-    var endHour = parseInt(beginingHour) + 3;
-    var minutes = _.split(entry.time, ':')[1];
+  const splitDate = _.split(entry.date, '/');
+  const beginningHour = _.split(entry.time, ':')[ 0 ];
+  const endHour = parseInt(beginningHour) + 3;
+  const minutes = _.split(entry.time, ':')[ 1 ];
 
-    var beginingAsArray = ['20', splitDate[2], splitDate[1], splitDate[0], 'T', beginingHour, minutes];
-    var beginingAsString = _.join(beginingAsArray, '');
+  const beginningAsString = `20${splitDate[ 2 ]}${splitDate[ 1 ]}${splitDate[ 0 ]}T${beginningHour}${minutes}`;
+  const endAsString = `20${splitDate[ 2 ]}${splitDate[ 1 ]}${splitDate[ 0 ]}T${endHour}${minutes}`;
 
-    var endAsArray = ['20', splitDate[2], splitDate[1], splitDate[0], 'T', endHour, minutes];
-    var endAsString = _.join(endAsArray, '');
+  const beginningTime = moment(beginningAsString).format();
+  const endTime = moment(endAsString).format();
+  reformatted.dtstart = beginningTime;
+  reformatted.dtend = endTime;
+  reformatted.location = entry.gymnasium;
+  return reformatted;
+};
 
-    var beginingTime = moment(beginingAsString).format();
-    var endTime = moment(endAsString).format();
-    reformatted.dtstart = beginingTime;
-    reformatted.dtend = endTime;
-
-    reformatted.location = entry.gymnasium;
-    return reformatted;
-  };
-
-  dump = function (entry) {
-    icsContent += entry;
-  };
-
-  icsify = function (inputFilePath) {
-    var fileContent = fs.readFileSync(inputFilePath, 'utf8');
-    var entries = JSON.parse(fileContent);
-
-    var events = _(entries)
-    .filter(function (entry) {
-      return entry.teamA === asbTeamName || entry.teamB === asbTeamName;
+const icsify = (teamName, inputFilePath, outputFilePath) => {
+  const csv = require('csvtojson');
+  const entries = [];
+  csv()
+    .fromFile(inputFilePath)
+    .on('json', (entry) => {
+      entries.push(entry);
     })
-    .map(reformatEntry)
-    .value();
+    .on('end', () => {
+      const events = _(entries)
+        .filter((entry) => entry.teamA === teamName || entry.teamB === teamName)
+        .map(entry => reformatEntry(teamName, entry))
+        .value();
 
-    var calendar = ics.getCalendar({ events: events });
-    console.log(calendar);
+      const calendar = ics.getCalendar({ events: events });
+      fs.writeFileSync(outputFilePath, calendar, 'utf8');
+    });
+};
 
-    // .map(JSON.stringify)
-    // .map(dump)
-    // .value();
-  };
-
-  return {
-    icsify: icsify,
-  };
-
-}());
+icsify(process.argv[ 2 ], process.argv[ 3 ], process.argv[ 4 ]);
