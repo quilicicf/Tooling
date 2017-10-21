@@ -5,7 +5,10 @@
   "main": "icsify.js",
   "license": "MIT",
   "dependencies": {
-    "lodash": "^4.15.0",
-    "moment": "^2.15.0"
+    "csv": "^2.0.0",
+    "csvtojson": "^1.1.9",
+    "lodash": "^4.17.4",
+    "moment": "^2.19.1",
+    "moment-timezone": "^0.5.13"
   }
 }
