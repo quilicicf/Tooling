@@ -11,6 +11,10 @@ test -f "$PRIVATE_TOOLING/bashrc/Git/repos.json" && {
 
 # Opens the project's URL in the default browser.
 # Uses: xo
+# $1: open another page:
+# -p: to open the PRs
+# -i: to open the issues
+# -w: to open the Wiki
 rop() {
   local remote remoteSshUrl
   remote="$(git remote show)"
@@ -19,7 +23,20 @@ rop() {
   local regex='^git@github.com:(.*).git$'
   [[ "$remoteSshUrl" =~ $regex ]]
 
-  xo "https://github.com/${BASH_REMATCH[1]}"
+  if [[ "$1" = '-p' ]]; then
+    xo "https://github.com/${BASH_REMATCH[1]}/pulls"
+
+  elif [[ "$1" = '-i' ]]; then
+    xo "https://github.com/${BASH_REMATCH[1]}/issues"
+
+  elif [[ "$1" = '-w' ]]; then
+    xo "https://github.com/${BASH_REMATCH[1]}/wiki"
+
+  else
+    xo "https://github.com/${BASH_REMATCH[1]}"
+
+  fi
+
 }
 
 # Jump to a repo
