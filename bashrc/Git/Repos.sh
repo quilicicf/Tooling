@@ -9,6 +9,18 @@ test -f "$PRIVATE_TOOLING/bashrc/Git/repos.json" && {
   REPOS_CONFIG="$(jqcr -s '.[0] * .[1]' "$TOOLING/bashrc/Git/repos.json" "$PRIVATE_TOOLING/bashrc/Git/repos.json")"
 }
 
+# Opens the project's URL in the default browser.
+# Uses: xo
+rop() {
+  local remote remoteSshUrl
+  remote="$(git remote show)"
+  remoteSshUrl="$(git remote show "$remote" -n | grep 'Fetch URL:' | awk -F '[ ]' '{print $5}')"
+
+  local regex='^git@github.com:(.*).git$'
+  [[ "$remoteSshUrl" =~ $regex ]]
+
+  xo "https://github.com/${BASH_REMATCH[1]}"
+}
 
 # Jump to a repo
 # $1: search string for the repo
