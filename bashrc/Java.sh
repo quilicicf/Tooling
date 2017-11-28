@@ -12,9 +12,8 @@ JRE_HOME="$(javaGetJre)"
 JAVA_HOME="${JRE_HOME/\/jre/}"
 
 # Sets the java version for the system
-# $1: the new version (values: 7, 8)
 javaSetVersion() {
-  sudo update-alternatives --set java "/usr/lib/jvm/java-$1-oracle/jre/bin/java"
+  sudo update-alternatives --config java
   JRE_HOME="$(javaGetJre)"
   JAVA_HOME="${JRE_HOME/\/jre/}"
 }
