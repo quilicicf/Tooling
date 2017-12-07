@@ -11,6 +11,11 @@ export PATH="$PATH:/usr/bin/node"
 # Maven
 export PATH="$PATH:$MAVEN/bin"
 
+# Go
+export PATH="$PATH:/usr/local/go/bin"
+export GOPATH="$HOME/go"
+export PATH="$PATH:$GOPATH/bin"
+
 # NVM
 export NVM_DIR="$HOME/.nvm"
 _configureNvm() {
