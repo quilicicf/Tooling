@@ -5,6 +5,9 @@
 # DSE
 export PATH="$PATH:$WORK/dse/bin/"
 
+# MongoDB
+export PATH="$WORK/mongodb/bin:$PATH"
+
 # Node
 export PATH="$PATH:/usr/bin/node"
 
