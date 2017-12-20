@@ -7,11 +7,11 @@
 # Existing preset: -h = home
 screens() {
   local paramsConfig='{"o":{"hasValue": false, "isRequired": false, "type": "boolean"}, "h": {"hasValue": false, "isRequired": false, "type": "boolean"}, "s": {"hasValue": false, "isRequired": false, "type": "boolean"}}'
-  local params="$(setParams "$paramsConfig" "$@")"
+  local params
+  params="$(setParams "$paramsConfig" "$@")"
 
   if isTrue "$(jsonGet '.o' <<< "$params")"; then
-    xrandr --output DP1 --auto --above eDP1
-    xrandr --output HDMI1 --auto --rotate left --left-of DP1
+    xrandr --output DP1 --auto --left-of eDP1
 
   elif isTrue "$(jsonGet '.h' <<< "$params")"; then
     xrandr --output HDMI1 --auto --above eDP1
