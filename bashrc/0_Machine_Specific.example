@@ -28,6 +28,8 @@ export BASH_PROMPT_PATH=$HOME'/.config/bash-prompt'
 #       Variables      #
 ########################
 
+export TERM='xterm-256color'
+
 # User's github id
 export GITHUB_ID='quilicicf'
 
