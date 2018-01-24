@@ -2,6 +2,8 @@
 #   Git configuration  #
 ########################
 
+# shellcheck source=/dev/null
+
 if test -f "$FORGE/github/quilicicf/bash-git-prompt/gitprompt.sh"; then
   . "$_";
   export GIT_PROMPT_THEME="Splendid";
@@ -12,14 +14,18 @@ elif isLogModeOn; then
   colorize "Please clone quilicicf/bash-git-prompt in $FORGE and switch to branch master_adjusted, otherwise the prompt will be broken." "$RED"
 fi
 
-test -f "$FORGE/bash-git-prompt/git-prompt-help.sh" && . "$_"
+# shellcheck source=/dev/null
+test -f "$FORGE/github/quilicicf/bash-git-prompt/git-prompt-help.sh" && . "$_"
 
 if test -f "$FORGE/github/git/git/contrib/completion/git-completion.bash"; then
+  # shellcheck source=/dev/null
   . "$_"
 elif isLogModeOn; then
   colorize "Please clone git/git in $FORGE, otherwise, git completion and git prompt will be broken." "$RED"
 fi
-test -f "$FORGE/git/contrib/completion/git-prompt.sh" && . "$_"
+
+# shellcheck source=/dev/null
+test -f "$FORGE/github/git/git/contrib/completion/git-prompt.sh" && . "$_"
 
 # Simple branch name without remote and state
 git_branch_simple() {
@@ -36,6 +42,7 @@ installGutScripts() {
   local script
   test -d ~/.config/gut && {
     while read script; do
+      # shellcheck source=/dev/null
       . "$script"
     done <<< "$(find ~/.config/gut -name '*.sh')"
   }
