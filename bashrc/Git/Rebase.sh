@@ -12,7 +12,7 @@ grb() {
 # Makes an interactive rebase (with autosquash) on the n last commits
 # $1: the number of commits to rebase
 grbn() {
-  git rebase "HEAD~$1" -i
+  git rebase "HEAD~$1" -i --autosquash
 }
 
 # Makes an interactive rebase (with autosquash) on the 2 last commits
