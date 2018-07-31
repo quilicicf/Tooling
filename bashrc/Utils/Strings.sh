@@ -40,3 +40,15 @@ trim() {
   until trimmed="${toTrim%[   ]}"; [ "$trimmed" = "$toTrim" ]; do toTrim="$trimmed"; done
   echo "$toTrim"
 }
+
+# Creates a UUID and only returns its first part
+smallUuid() {
+  uuid | awk -F- '{print $1}'
+}
+
+# Creates a date in ISO 8601
+dateISO() {
+  local dateWithNanoSeconds
+  dateWithNanoSeconds="$(date +"%Y-%m-%dT%H:%M:%S.%N%:z")"
+  printf '%s%s\n' "${dateWithNanoSeconds:0:23}" "${dateWithNanoSeconds:29}"
+}
