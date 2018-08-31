@@ -12,7 +12,7 @@ alias gsth="git stash"
 
 # Alias to git difftool
 gdt(){
-  launch -d -p "git difftool -d $*"
+  launch -d -p "git difftool -d HEAD"
 }
 
 # Displays the diff between HEAD and HEAD - n with the favorite difftool
@@ -34,10 +34,10 @@ gdtnm() {
   shift
   m=$(readInt 0 "$1")
   shift
-  if [ "$m" = "0" ]; then
-    gdt "HEAD~$n..HEAD" "$@"
+  if [[ "$m" = "0" ]]; then
+    git difftool -d "HEAD~$n..HEAD" "$@"
   else
-    gdt "HEAD~$n..HEAD~$m" "$@"
+    git difftool -d "HEAD~$n..HEAD~$m" "$@"
   fi
 }
 
