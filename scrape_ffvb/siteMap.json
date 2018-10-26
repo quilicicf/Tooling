@@ -1,5 +1,5 @@
 {
-  "startUrl": "http://www.ffvbbeach.org/ffvbapp/resu/vbspo_calendrier.php?saison=2017%2F2018&codent=ABCCS&poule=3MH&division=&tour=&calend=COMPLET&x=10&y=8",
+  "startUrl": "http://www.ffvbbeach.org/ffvbapp/resu/vbspo_calendrier.php?saison=2018%2F2019&codent=ABCCS&poule=3MF&division=&tour=&calend=COMPLET&x=10&y=8",
   "selectors": [{
       "parentSelectors": [
         "line"
