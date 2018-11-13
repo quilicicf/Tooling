@@ -59,17 +59,6 @@ openall() {
   done <<< "$@"
 }
 
-# Generates a PNG file from the given dot file.
-# Uses: graphviz
-# $1: the dot file name
-mydot() {
-  local regex="^([^\.]+)\.dot$"
-  [[ $1 =~ $regex ]] || { echo "The file name must follow the regex: ^[^\.]+\.dot$"; return 1; }
-  local fileName=${BASH_REMATCH[1]}
-  dot -Tpng -o "$fileName.png" "$fileName.dot"
-  xo "$fileName.png"
-}
-
 # Returns a code 0 if the input is "true", 1 otherwise
 # $1: the string to evaluate
 isTrue() {
