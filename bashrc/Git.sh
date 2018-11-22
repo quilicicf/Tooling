@@ -11,7 +11,7 @@ if test -f "$FORGE/github/quilicicf/bash-git-prompt/gitprompt.sh"; then
   export GIT_PS1_SHOWUNTRACKEDFILES=true
   export GIT_PS1_SHOWUPSTREAM=verbose
 elif isLogModeOn; then
-  colorize "Please clone quilicicf/bash-git-prompt in $FORGE and switch to branch master_adjusted, otherwise the prompt will be broken." "$RED"
+  printfc "Please clone quilicicf/bash-git-prompt in $FORGE and switch to branch master_adjusted, otherwise the prompt will be broken." "$RED"
 fi
 
 # shellcheck source=/dev/null
@@ -21,7 +21,7 @@ if test -f "$FORGE/github/git/git/contrib/completion/git-completion.bash"; then
   # shellcheck source=/dev/null
   . "$_"
 elif isLogModeOn; then
-  colorize "Please clone git/git in $FORGE, otherwise, git completion and git prompt will be broken." "$RED"
+  printfc "Please clone git/git in $FORGE, otherwise, git completion and git prompt will be broken." "$RED"
 fi
 
 # shellcheck source=/dev/null
