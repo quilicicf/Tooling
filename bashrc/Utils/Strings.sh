@@ -52,3 +52,8 @@ dateISO() {
   dateWithNanoSeconds="$(date +"%Y-%m-%dT%H:%M:%S.%N%:z")"
   printf '%s%s\n' "${dateWithNanoSeconds:0:23}" "${dateWithNanoSeconds:29}"
 }
+
+# Jenkins-like dates: 20181231120155
+dateAllNumbers() {
+  date +"%Y%m%d%H%M%S"
+}
