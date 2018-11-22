@@ -8,9 +8,9 @@ export PR_SETTINGS_FILE="$TOOLING/bashrc/Git/pr.json"
 if test -f "$PR_SETTINGS_FILE"; then
   PR_SETTINGS="$(jqcr '.' < "$PR_SETTINGS_FILE")"
 else
-  colorize "A configuration file has been created for the PR feature at " "$YELLOW"
-  colorize "$PR_SETTINGS_FILE\n" "$CYAN"
-  colorize "Feel free to update it to your wishes.\n" "$YELLOW"
+  printfc "A configuration file has been created for the PR feature at " "$YELLOW"
+  printfc "$PR_SETTINGS_FILE\n" "$CYAN"
+  printfc "Feel free to update it to your wishes.\n" "$YELLOW"
   jq <<< "$PR_SETTINGS" > "$PR_SETTINGS_FILE"
 fi
 

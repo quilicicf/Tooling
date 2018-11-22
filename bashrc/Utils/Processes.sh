@@ -83,7 +83,7 @@ _signalResult() {
     mplayer "$mp3" -softvol -volume 200
     soundUnmute
   else
-    colorize "Sound $mp3 not found!" "$RED"
+    printfc "Sound $mp3 not found!" "$RED"
   fi
 
   printfc "$message\n" "$color"

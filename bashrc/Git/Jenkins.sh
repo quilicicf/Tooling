@@ -5,7 +5,7 @@
 export JENKINS_FILE="$PRIVATE_TOOLING/jenkins.json"
 
 test -f "$JENKINS_FILE" || {
-  colorize "Please type your API credentials in $JENKINS_FILE" "$RED"
+  printfc "Please type your API credentials in $JENKINS_FILE" "$RED"
   printf '{\n  "login": "",\n  "password": ""\n}\n' > "$JENKINS_FILE"
 }
 

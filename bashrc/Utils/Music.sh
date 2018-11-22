@@ -7,7 +7,7 @@
 export MUSIC_FILE="$PRIVATE_TOOLING/music.json"
 
 test -f "$MUSIC_FILE" || {
-  colorize "Please type your API credentials in $MUSIC_FILE" "$RED"
+  printfc "Please type your API credentials in $MUSIC_FILE" "$RED"
   printf '{\n  "login": "",\n  "password": ""\n}\n' > "$MUSIC_FILE"
 }
 

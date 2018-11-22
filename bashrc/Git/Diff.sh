@@ -74,7 +74,7 @@ gkf() {
     gitk --all "$files" &
 
   else
-    colorize "Expected 1 file with pattern '$pattern', found $filesNumber." "$RED"
+    printfc "Expected 1 file with pattern '$pattern', found $filesNumber." "$RED"
     exit 1
   fi
 }
