@@ -41,6 +41,10 @@ trim() {
   echo "$toTrim"
 }
 
+uuid4 () {
+  uuid -v 4
+}
+
 # Creates a UUID and only returns its first part
 smallUuid() {
   uuid | awk -F- '{print $1}'
