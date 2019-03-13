@@ -1,0 +1,8 @@
+seqdiag {
+  edge_length = 300;
+  span_height = 20;
+  default_fontsize = 14;
+  default_note_color = lightblue;
+
+  
+}
