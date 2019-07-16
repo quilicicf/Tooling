@@ -110,3 +110,4 @@ printfcCode() {
 
 alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
+alias rgb2hex='printf "#%02x%02x%02x\n"'

@@ -13,11 +13,16 @@
 */
 
 const _ = require('lodash');
-const fs = require('fs');
+const { existsSync } = require('fs');
 const csvtojson = require('csvtojson');
 const moment = require('moment');
+const { prompt } = require('inquirer');
 
 const ics = require('../../js2ics/index.js');
+
+const ANSWERS = {
+  CSV_PATH: 'csvPath',
+};
 
 const reformatEntry = (teamName, entry) => {
   const reformatted = {};
@@ -54,3 +59,22 @@ const icsify = async (teamName, inputFilePath, outputFilePath) => {
 };
 
 icsify(process.argv[ 2 ], process.argv[ 3 ], process.argv[ 4 ]);
+
+prompt([
+  {
+    type: 'input',
+    name: ANSWERS.CSV_PATH,
+    async validate (userInput, answers) {
+      if (!existsSync(userInput)) {
+        return `Path ${userInput} does not exist`;
+      }
+
+      try {
+        await csvtojson().fromFile(userInput);
+        return true;
+      } catch (error) {
+        return `Can't read the file ${userInput}, is it valid CSV?`;
+      }
+    }
+  },
+]);

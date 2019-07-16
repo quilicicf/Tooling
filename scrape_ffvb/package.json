@@ -7,7 +7,8 @@
   "dependencies": {
     "csv": "5.1.1",
     "csvtojson": "2.0.8",
-    "lodash": "4.17.11",
+    "inquirer": "6.5.0",
+    "lodash": "4.17.14",
     "moment": "2.24.0",
     "moment-timezone": "0.5.23"
   }
