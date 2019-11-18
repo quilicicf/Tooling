@@ -9,8 +9,14 @@ gnomeHideTopPanel() {
 
 _screenOffice() {
   xrandr \
-    --output 'DP-2'   --pos '1920x0' --auto --rate '60' \
-    --output 'DP-3-8' --pos '0x0'    --auto --rate '59.950172424316406' --primary
+    --output 'DP-3'   --pos '1920x0' --auto --rate '59.950172424316406' \
+    --output 'HDMI-2' --pos '0x0'    --auto --rate '59.950172424316406' --primary
+}
+
+_screenTargus() {
+  xrandr \
+    --output 'DVI-I-2-1'  --pos '1920x0' --auto --rate '60' \
+    --output 'DVI-I-3-2'  --pos '0x0'    --auto --rate '59.95' --primary
 }
 
 _screenLaptop() {
@@ -22,6 +28,8 @@ screens() {
 
   if [[ "$disposition" = '-o' ]]; then
     _screenOffice
+  elif [[ "$disposition" = '-t' ]]; then
+    _screenTargus
   elif [[ "$disposition" = '-l' ]]; then
     _screenLaptop
   fi
