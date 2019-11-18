@@ -12,10 +12,10 @@ dotify() {
   local outputFormat='svg'
 
   # Global
-  local font='Roboto'
-  local fontSize='12'
+  local font='Ubuntu'
+  local fontSize='24'
   local bgColor='#FFFFFF00'
-  local fgColor='#999999'
+  local fgColor='#7a7a7a'
 
   # Graph
   local titleSize='20'
@@ -28,14 +28,27 @@ dotify() {
   local arrowHead='empty'
 
   inotifywait -rm . -e close_write |
-  while read path action file; do
-    if [[ "$file" =~ .*\.dot$ ]]; then
-      printf 'Generating file: %s\n' "$file"
-      dot \
-        -Gbgcolor="$bgColor" -Gfontcolor="$fgColor" -Gfontsize="$titleSize" \
-        -Nfontname="$font" -Nfontsize="$fontSize" -Nshape="$shape" -Nstyle="$style" -Ncolor="$fgColor" -Nfontcolor="$fgColor" \
-        -Efontname="$font" -Efontsize="$fontSize" -Earrowhead="$arrowHead" -Efontcolor="$fgColor" -Ecolor="$fgColor" \
-        -T"$outputFormat" "$path$file" -o "$path${file//\.dot/\.$outputFormat}"
-    fi
-  done
+    while read path action file; do
+      if [[ "$file" =~ .*\.dot$ ]]; then
+        printf 'Generating file: %s\n' "$file"
+        # -Gbgcolor="$bgColor" -Gfontcolor="$fgColor" -Gfontsize="$titleSize" \
+        # -Nfontname="$font" -Nfontsize="$fontSize" -Nshape="$shape" -Nstyle="$style" -Ncolor="$fgColor" -Nfontcolor="$fgColor" \
+        # -Efontname="$font" -Efontsize="$fontSize" -Earrowhead="$arrowHead" -Efontcolor="$fgColor" -Ecolor="$fgColor" \
+        dot \
+          -Gfontsize="$titleSize" \
+          -Nfontname="$font" -Nfontsize="$fontSize" \
+          -Efontname="$font" -Efontsize="$fontSize" \
+          -T"$outputFormat" "$path$file" -o "$path${file//\.dot/\.$outputFormat}"
+      fi
+    done
+}
+
+seqify() {
+  inotifywait -rm . -e close_write |
+    while read path action file; do
+      if [[ "$file" =~ .*\.pu$ ]]; then
+        printf 'Generating file: %s\n' "$file"
+        plantuml "$path$file"
+      fi
+    done
 }
