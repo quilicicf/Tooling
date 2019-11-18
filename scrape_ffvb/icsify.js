@@ -13,44 +13,207 @@
 */
 
 const _ = require('lodash');
-const fs = require('fs');
-const csvtojson = require('csvtojson');
+const { existsSync } = require('fs');
 const moment = require('moment');
+const { tz } = require('moment-timezone');
+const { prompt, registerPrompt } = require('inquirer');
+registerPrompt('autocomplete', require('inquirer-autocomplete-prompt'));
 
-const ics = require('../../js2ics/index.js');
+const parseCsv = require('./parseCsv');
+const writeFile = require('./writeFile');
+const replaceExtension = require('./replaceExtension');
 
-const reformatEntry = (teamName, entry) => {
-  const reformatted = {};
-  const enemyTeam = entry.teamA === teamName
-    ? entry.teamB
-    : entry.teamA;
-  reformatted.eventName = `Match contre ${enemyTeam}`;
+const { getCalendar } = require('../../js2ics/index.js');
 
-  const splitDate = _.split(entry.date, '/');
-  const beginningHour = _.split(entry.time, ':')[ 0 ];
-  const endHour = parseInt(beginningHour, 0) + 3;
-  const minutes = _.split(entry.time, ':')[ 1 ];
+const INPUT_DATE_FORMAT = 'YYYY-MM-DD'; // TODO: guess or prompt
+const INPUT_TIME_FORMAT = 'HH:mm'; // TODO: guess or prompt
 
-  const beginningAsString = `20${splitDate[ 2 ]}${splitDate[ 1 ]}${splitDate[ 0 ]}T${beginningHour}${minutes}`;
-  const endAsString = `20${splitDate[ 2 ]}${splitDate[ 1 ]}${splitDate[ 0 ]}T${endHour}${minutes}`;
+const GUESSED_TIME_ZONE = tz.guess();
+const TIME_ZONES = [
+  { name: `${GUESSED_TIME_ZONE} (guessed)`, value: GUESSED_TIME_ZONE },
+  ..._.map(tz.names(), name => ({ name, value: name }))
+];
 
-  const beginningTime = moment(beginningAsString).format();
-  const endTime = moment(endAsString).format();
-  reformatted.dtstart = beginningTime;
-  reformatted.dtend = endTime;
-  reformatted.location = entry.gymnasium;
-  return reformatted;
+const ANSWERS = {
+  CSV_PATH: 'csvPath',
+  JSON_CONTENT: 'jsonContent',
+  YOUR_TEAM: 'yourTeam',
+  TIME_ZONE: 'timeZone',
+
+  FIELD_TEAM_A: 'fieldTeamA',
+  FIELD_TEAM_B: 'fieldTeamB',
+  FIELD_DATE: 'fieldDate',
+  FIELD_TIME: 'fieldTime',
+
+  SHOULD_ADD_LOCATION: 'shouldAddLocation',
+  FIELD_LOCATION: 'fieldLocation',
 };
 
-const icsify = async (teamName, inputFilePath, outputFilePath) => {
-  const json = await csvtojson().fromFile(inputFilePath);
-  const events = _(json)
-    .filter(entry => [ entry.teamA, entry.teamB ].includes(teamName))
-    .map(entry => reformatEntry(teamName, entry))
+const FIELD_ANSWER_FIELDS = _(ANSWERS)
+  .values()
+  .filter(value => /^field[A-Z]/.test(value))
+  .value();
+
+const reformatEntry = (answers, entry) => {
+  const {
+    [ ANSWERS.YOUR_TEAM ]: teamName,
+    [ ANSWERS.FIELD_TEAM_A ]: fieldTeamA,
+    [ ANSWERS.FIELD_TEAM_B ]: fieldTeamB,
+    [ ANSWERS.FIELD_DATE ]: fieldDate,
+    [ ANSWERS.FIELD_TIME ]: fieldTime,
+    [ ANSWERS.SHOULD_ADD_LOCATION ]: hasLocation,
+    [ ANSWERS.FIELD_LOCATION ]: fieldLocation,
+  } = answers;
+
+  const enemyTeam = entry[ fieldTeamA ] === teamName ? entry[ fieldTeamB ] : entry[ fieldTeamA ];
+  const date = moment(entry[ fieldDate ], INPUT_DATE_FORMAT);
+  const time = moment(entry[ fieldTime ], INPUT_TIME_FORMAT);
+  const startTime = moment(date)
+    .hours(time.get('hour'))
+    .minutes(time.get('minute'));
+  const endTime = moment(startTime).add(3, 'hours');
+
+  return {
+    eventName: `Match contre ${enemyTeam}`,
+    dtstart: startTime.format(),
+    dtend: endTime.format(),
+    location: hasLocation ? entry[ fieldLocation ] : '',
+  };
+};
+
+const icsify = async (answers) => {
+  const {
+    [ ANSWERS.YOUR_TEAM ]: teamName,
+    [ ANSWERS.TIME_ZONE ]: timeZone,
+    [ ANSWERS.FIELD_TEAM_A ]: fieldTeamA,
+    [ ANSWERS.FIELD_TEAM_B ]: fieldTeamB,
+    [ ANSWERS.CSV_PATH ]: inputFilePath,
+  } = answers;
+
+  const events = _(answers[ ANSWERS.JSON_CONTENT ].lines)
+    .filter(entry => [ entry[ fieldTeamA ], entry[ fieldTeamB ] ].includes(teamName))
+    .map(entry => reformatEntry(answers, entry))
     .value();
 
-  const calendar = ics.getCalendar({ events });
-  fs.writeFileSync(outputFilePath, calendar, 'utf8');
+  const calendar = getCalendar({ events, timeZone });
+  const outputFilePath = replaceExtension(inputFilePath, '.ics');
+  await writeFile(outputFilePath, calendar);
 };
 
-icsify(process.argv[ 2 ], process.argv[ 3 ], process.argv[ 4 ]);
+const findInHeaders = async (answers, search = '') => Promise.resolve(
+  _(answers[ ANSWERS.JSON_CONTENT ].headers)
+    .filter(header => { // Filter out fields that were already selected
+        const hasAlreadyBeenAnswered = _(FIELD_ANSWER_FIELDS)
+          .map(fieldAnswerField => answers[ fieldAnswerField ])
+          .filter(answerForField => !!answerForField)
+          .includes(header);
+        return !hasAlreadyBeenAnswered;
+      }
+    )
+    .filter(header => !_.isEmpty(header))
+    .filter(header => header.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
+    .value(),
+);
+
+const questions = [
+  {
+    type: 'input',
+    name: ANSWERS.CSV_PATH,
+    message: 'Where is your CSV file?',
+    async validate (userInput, answers) {
+      if (!existsSync(userInput)) {
+        return `Path ${userInput} does not exist`;
+      }
+
+      try {
+        const jsonContent = await parseCsv(userInput);
+        _.set(answers, ANSWERS.JSON_CONTENT, jsonContent);
+        return true;
+      } catch (error) {
+        return `Can't read the file ${userInput}, is it valid CSV?`;
+      }
+    }
+  },
+  {
+    type: 'autocomplete',
+    name: ANSWERS.FIELD_TEAM_A,
+    message: 'What is the field name for team A?',
+    source: findInHeaders,
+    pageSize: 10,
+  },
+  {
+    type: 'autocomplete',
+    name: ANSWERS.FIELD_TEAM_B,
+    message: 'What is the field name for team B?',
+    source: findInHeaders,
+    pageSize: 10,
+  },
+  {
+    type: 'autocomplete',
+    name: ANSWERS.FIELD_DATE,
+    message: 'What is the field name for the date?',
+    source: findInHeaders,
+    pageSize: 10,
+  },
+  {
+    type: 'autocomplete',
+    name: ANSWERS.FIELD_TIME,
+    message: 'What is the field name for the time?',
+    source: findInHeaders,
+    pageSize: 10,
+  },
+  {
+    type: 'confirm',
+    name: ANSWERS.SHOULD_ADD_LOCATION,
+    message: 'Are the locations where the matches happen in your file?',
+    default: false,
+  },
+  {
+    type: 'autocomplete',
+    name: ANSWERS.FIELD_LOCATION,
+    message: 'What is the field name for the location?',
+    source: findInHeaders,
+    pageSize: 10,
+  },
+  {
+    type: 'autocomplete',
+    name: ANSWERS.YOUR_TEAM,
+    message: 'What is your team?',
+    async source (answers, search = '') {
+      return Promise.resolve(
+        _(answers[ ANSWERS.JSON_CONTENT ].lines)
+          .map(line => line[ answers[ ANSWERS.FIELD_TEAM_A ] ])
+          .uniq()
+          .filter(teamName => teamName.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
+          .value(),
+      );
+
+    },
+    pageSize: 10,
+  },
+  {
+    type: 'autocomplete',
+    name: ANSWERS.TIME_ZONE,
+    message: 'What is your time-zone?',
+    async source (answers, search = '') {
+      return Promise.resolve(
+        _(TIME_ZONES)
+          .filter(tz => tz.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
+          .value(),
+      );
+
+    },
+    pageSize: 10,
+  },
+];
+
+const main = async () => {
+  try {
+    const answers = await prompt(questions);
+    await icsify(answers);
+  } catch (error) {
+    throw error;
+  }
+};
+
+main();
