@@ -43,12 +43,15 @@ dotify() {
     done
 }
 
-seqify() {
+pumlify() {
   inotifywait -rm . -e close_write |
     while read path action file; do
       if [[ "$file" =~ .*\.pu$ ]]; then
         printf 'Generating file: %s\n' "$file"
-        plantuml "$path$file"
+        cat "$path$file" \
+          | plantuml -pipe -tsvg \
+          | tr -d '\r' \
+          > "$path${file/\.pu/.svg}"
       fi
     done
 }
