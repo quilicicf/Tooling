@@ -2,9 +2,17 @@
 # Screens #
 #---------#
 
-gnomeHideTopPanel() {
+_gnomeShowTopPanel() {
   gnome-shell-extension-tool -d hide-top-panel@dimka665.gmail.com
+}
+
+_gnomeHideTopPanel() {
   gnome-shell-extension-tool -e hide-top-panel@dimka665.gmail.com
+}
+
+gnomeHideTopPanel() {
+  _gnomeShowTopPanel
+  _gnomeHideTopPanel
 }
 
 _screenOffice() {
