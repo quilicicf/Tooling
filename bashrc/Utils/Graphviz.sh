@@ -49,7 +49,7 @@ pumlify() {
       if [[ "$file" =~ .*\.pu$ ]]; then
         printf 'Generating file: %s\n' "$file"
         cat "$path$file" \
-          | plantuml -pipe -tsvg \
+          | plantuml -pipe -tsvg -config ~/.plantuml \
           | tr -d '\r' \
           > "$path${file/\.pu/.svg}"
       fi
