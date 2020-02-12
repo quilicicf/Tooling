@@ -4,7 +4,7 @@ const { homedir } = require('os');
 const { resolve } = require('path')
 const { readFileSync } = require('fs');
 
-const MAX_ICONS_TO_DISPLAY = 25;
+const MAX_ICONS_TO_DISPLAY = 50;
 
 const main = () => {
   const [ iconsPath, searchTerm ] = process.argv.splice(2);
