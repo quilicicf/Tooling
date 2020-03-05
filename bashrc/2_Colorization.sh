@@ -2,6 +2,9 @@
 #     Colorization     #
 ########################
 
+# For editors (i.e. meld)
+export GTK_THEME='Adwaita:dark'
+
 # For use in outputs (echo)
 export BLACK='\e[0;30m'
 export BLUE='\e[0;34m'
