@@ -26,24 +26,36 @@ launch() {
 # $1: the port
 showbyport() {
   local port
-  port=$(readInt "failure" "$1")
-  if [ "$port" = "failure" ];then
-    echo "Invalid port number $1"
+  port="$(readInt "failure" "$1")"
+  if [[ "$port" == "failure" ]]; then
+    printf 'Invalid port number: %s\n' "$1"
     return 1
   fi
-  lsof -i tcp:"$port" 2> /dev/null | tail -n +2 | awk '{print $1 " " $2}'
+
+  lsof -i "tcp:$port" 2> /dev/null | tail -n +2 | awk '{print $1 " " $2}'
 }
 
 # Kills the processes listening to a specified port
 # $1: the port
 killbyport() {
-  local process name pid
-  process=$(showbyport "$1") || { echo "Could not find port $1"; return 1; }
+  local processes name pid
+  local hasError='false'
+  local port="${1?Missing port number}"
+  processes="$(showbyport "$1")" || { printf 'Nothing using port %s\n' "$port"; return 1; }
 
-  name=$(echo "$process" | cut -d " " -f 1)
-  pid=$(echo "$process" | cut -d " " -f 2)
-  kill "$pid" || { echo "Could not kill $name:$pid on port $1"; return 1; }
-  echo "Killed process $name (pid=$pid)"
+  while read -r process; do
+    name="$(awk '{print $1}' <<< "$process")"
+    pid="$(awk '{print $2}' <<< "$process")"
+
+    if kill "$pid"; then
+      printf 'Killed process %s (pid=%s)\n' "$name" "$pid"
+    else
+      printf 'Could not kill %s:%s on port %s\n' "$name" "$pid" "$port"
+      hasError='true'
+    fi
+  done <<< "$processes"
+
+  [[ "$hasError" == 'false' ]] # Set the error code
 }
 
 # Shows a process's PID given its name
@@ -57,7 +69,7 @@ showbyname() {
 # $1: the name of the process
 killbyname() {
   local pid
-  pid=$(showbyname "$1")
+  pid="$(showbyname "$1")"
   kill "$pid"
 }
 
