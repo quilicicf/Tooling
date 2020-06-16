@@ -61,7 +61,7 @@ promptBuild() {
 # Beautiful prompt
 PROMPT_COMMAND="RET=\$?;$PROMPT_COMMAND"
 
-# ALlows direnv to work. It loads .envrc when cding
+# Allows direnv to work. It loads .envrc when cding
 direnv &> /dev/null && { eval "$(direnv hook bash)"; }
 
 RET_VAL_COLOR="\$(if [[ \$RET -ne 0 ]]; then echo -ne \" \033[0;31m[\$RET]\033[0m \"; else echo -ne \"\"; fi;)"

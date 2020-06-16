@@ -14,7 +14,7 @@ This theme uses Font Awesome and Powerline fonts. Install them before anything e
 
 Alternatively, you can use fonts from <https://www.nerdfonts.com/>.
 
-Uses the method `buildPrompt` from `buildPrompt.sh` to build a beautiful shell prompt in file `ps1` from configuration file `ps1_config`.
+Uses the method `promptBuild` from `$REPO_ROOT/bashrc/Prompt.sh` to build a beautiful shell prompt in file `ps1` from configuration file `ps1_config`.
 
 ## Configure the segments
 
@@ -48,7 +48,7 @@ The file `ps1_config` describes the segments of the prompt in CSV. Each line cor
 
 ## Generate the PS1
 
-Build the prompt by running `buildPrompt` from the file `buildPrompt.sh` then add the following lines in your bashrc:
+Build the prompt by running `promptBuild` from `$REPO_ROOT/bashrc/Prompt.sh` then add the following lines in your bashrc:
 
 ```bash
 export BASH_PROMPT_PATH="/path/to/ps1/file"
@@ -56,5 +56,5 @@ export BASH_PROMPT_PATH="/path/to/ps1/file"
 # Last return code (used in segments 2 & 3 of the example)
 RET=$?
 BASH_PROMPT=$(cat "$BASH_PROMPT_PATH/ps1")
-[ -n "$PS1" ] && PS1="$BASH_PROMPT"
+[[ -n "$PS1" ]] && PS1="$BASH_PROMPT"
 ```
