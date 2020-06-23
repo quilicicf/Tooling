@@ -9,26 +9,21 @@ const MAX_ICONS_TO_DISPLAY = 50;
 const main = () => {
   const [ iconsPath, searchTerm ] = process.argv.splice(2);
   const iconsContent = readFileSync(iconsPath, 'utf8');
-  const icons = JSON.parse(iconsContent);
+  const { icons } = JSON.parse(iconsContent);
 
-  const matchingIcons = Object.keys(icons)
-    .map(key => ({
-      name: key,
-      icon: icons[ key ],
-    }))
-    .filter(({ icon, name }) => (
-      icon.search.terms.some(term => term.includes(searchTerm))
-        || name.includes(searchTerm)
-    ));
+  const matchingIcons = icons
+    .filter(({ id, filter }) => {
+      return [ id, ...(filter || []) ].some(term => term.includes(searchTerm))
+    });
 
   process.stdout.write(`Found ${matchingIcons.length} icons:\n`);
   if (matchingIcons.length > MAX_ICONS_TO_DISPLAY) {
-    process.stdout.write('More than 10 icons matched, please narrow down your search\n');
+    process.stdout.write(`More than ${MAX_ICONS_TO_DISPLAY} icons matched, please narrow down your search\n`);
     process.exit(1);
   }
 
-  matchingIcons.forEach(({ icon, name }) => {
-    const character = String.fromCharCode(parseInt(icon.unicode, 16));
+  matchingIcons.forEach(({ unicode, name }) => {
+    const character = String.fromCharCode(parseInt(unicode, 16));
     process.stdout.write(` ${character}\t${name}\n`);
   });
 };
