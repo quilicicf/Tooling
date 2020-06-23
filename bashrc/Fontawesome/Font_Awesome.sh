@@ -16,11 +16,11 @@ faPrint() {
 # Uses: yq, jq
 faGet() {
   local folderPath=~/.config/bashrc/fontawesome
-  if ! test -d "$folderPath"; then mkdir -p "$folderPath"; fi
+  test -d "$folderPath" || { mkdir -p "$folderPath"; }
 
   local iconsJsonFilePath="$folderPath/icons.json"
 
-  curl 'https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/js-packages/%40fortawesome/fontawesome-free/metadata/icons.yml' \
+  curl 'https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.7.0/src/icons.yml' \
     | yq read - --tojson \
     | jq '.' \
     > "$iconsJsonFilePath"
