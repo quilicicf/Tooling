@@ -27,7 +27,6 @@ alias wget='wget -c'
 #   Utility aliases   #
 #######################
 
-alias diff='colordiff'
 alias path='echo -e ${PATH//:/\\n}'
 alias mkdir='mkdir -p'
 alias now='date +'%T''

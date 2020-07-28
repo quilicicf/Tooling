@@ -27,11 +27,28 @@ export DEFAULT='\e[0m'
 export shellColors
 shellColors=$(cat "$TOOLING/bash-prompt/colors")
 
-# Enable color support of ls and also add handy aliases
-if [ "$TERM" != "dumb" ]; then
-  eval "$(dircolors -b)"
-  alias ls="ls --color=auto"
-fi
+#-------------------#
+# Colorize commands #
+#-------------------#
+
+alias ls="ls --color=auto"
+[[ "$TERM" != "dumb" ]] && { eval "$(dircolors -b)"; }
+
+alias diff='colordiff'
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias rgb2hex='printf "#%02x%02x%02x\n"'
+
+export LESSOPEN="| /usr/bin/highlight %s --out-format truecolor --force --line-numbers --style andes"
+export LESS='--RAW-CONTROL-CHARS' # Use colors for less, man, etc.
+test -f ~/.config/less/termcap && { . "$_"; }
+
+# grc.bashrc from https://github.com/garabik/grc/raw/master/grc.bashrc
+test -s ~/.config/grc.bashrc && { source "$_"; }
+
+#---------------------#
+# Color manipulations #
+#---------------------#
 
 colorList() {
   echo "$shellColors" | awk -F '[ ]' '{ print $1 }'
@@ -110,7 +127,3 @@ printfcCode() {
   xo /tmp/printfc.html5
   rm /tmp/printfc.md > /dev/null
 }
-
-alias grep='grep --color=auto'
-alias egrep='egrep --color=auto'
-alias rgb2hex='printf "#%02x%02x%02x\n"'
