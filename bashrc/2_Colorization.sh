@@ -39,9 +39,10 @@ alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
 alias rgb2hex='printf "#%02x%02x%02x\n"'
 
-export LESSOPEN="| /usr/bin/highlight %s --out-format truecolor --force --line-numbers --style andes"
-export LESS='--RAW-CONTROL-CHARS' # Use colors for less, man, etc.
-test -f ~/.config/less/termcap && { . "$_"; }
+# These are messing with git logs unfortunately
+# export LESSOPEN="| /usr/bin/highlight %s --out-format truecolor --force --line-numbers --style andes"
+# export LESS='--RAW-CONTROL-CHARS' # Use colors for less, man, etc.
+# test -f ~/.config/less/termcap && { . "$_"; }
 
 # grc.bashrc from https://github.com/garabik/grc/raw/master/grc.bashrc
 test -s ~/.config/grc.bashrc && { source "$_"; }
