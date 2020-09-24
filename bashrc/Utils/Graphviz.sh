@@ -46,12 +46,12 @@ dotify() {
 pumlify() {
   inotifywait -rm . -e close_write |
     while read path action file; do
-      if [[ "$file" =~ .*\.pu$ ]]; then
+      if [[ "$file" =~ .*\.pu(ml)?$ ]]; then
         printf 'Generating file: %s\n' "$file"
         cat "$path$file" \
           | plantuml -pipe -tsvg -config ~/.plantuml \
           | tr -d '\r' \
-          > "$path${file/\.pu/.svg}"
+          > "$path${file/\.[puml]*/.svg}"
       fi
     done
 }
