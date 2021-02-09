@@ -60,3 +60,13 @@ shopt -s histappend
 shopt -s cmdhist
 HISTCONTROL=ignoredups
 shopt -s checkwinsize
+
+
+###############
+#     ASDF    #
+###############
+
+export ASDF_DIR=~/.asdf
+test -f "$ASDF_DIR/asdf.sh" && { source "$_"; }
+test -f "$ASDF_DIR/completions/asdf.bash"
+

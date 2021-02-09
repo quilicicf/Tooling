@@ -5,7 +5,7 @@
 # shellcheck source=/dev/null
 
 if test -f "$FORGE/github/quilicicf/bash-git-prompt/gitprompt.sh"; then
-  . "$_";
+  source "$_";
   export GIT_PROMPT_THEME="Splendid";
   export GIT_PS1_SHOWDIRTYSTATE=true
   export GIT_PS1_SHOWUNTRACKEDFILES=true
