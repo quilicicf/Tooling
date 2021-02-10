@@ -68,5 +68,5 @@ shopt -s checkwinsize
 
 export ASDF_DIR=~/.asdf
 test -f "$ASDF_DIR/asdf.sh" && { source "$_"; }
-test -f "$ASDF_DIR/completions/asdf.bash"
+test -f "$ASDF_DIR/completions/asdf.bash" && { source "$_"; }
 

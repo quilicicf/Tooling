@@ -12,14 +12,15 @@
 ########################
 
 export DESKTOP=$HOME'/Desktop'
-export WORK=$HOME'/Restlet'
+export WORK=$HOME'/work'
 
 # Where all the github repositories are (yes it's assumed they're all in one place)
 export FORGE=$WORK'/forge'
 
-export TOOLING=$FORGE'/Tooling'
+export TOOLING=$FORGE'/github/quilicicf/Tooling'
 export BASHRC=$TOOLING'/bashrc'
-export PRIVATE_TOOLING=$FORGE'/Private_Tooling'
+export BASHRC_UTILS=$TOOLING'/bashrcUtils'
+export PRIVATE_TOOLING=$FORGE'/github/quilicicf/Private_Tooling'
 export BASHRC_DOC=$HOME'/.bashrcDoc'
 
 export BASH_PROMPT_PATH=$HOME'/.config/bash-prompt'
@@ -37,4 +38,25 @@ export GITHUB_ID='quilicicf'
 export FUNNY_PROMPT="%¥©¬¶ǂ😋"
 
 # Final PS1
-export BASH_PROMPT=""
+export BASH_PROMPT=''
+
+export EDITOR='micro'
+
+direnv &> /dev/null && { eval "$(direnv hook bash)"; }
+
+test -f ~/.asdf/installs/deno/completions.sh && { source "$_"; }
+
+test -d "$WORK/bin" && { PATH="$PATH:$WORK/bin"; }
+
+# Installation of Gut scripts, see https://github.com/quilicicf/Gut/blob/master/specs/user_documentation.md#shell-features
+# If the link is broken, you probably want to read the README again https://github.com/quilicicf/Gut/blob/master/README.md
+installGutScripts() {
+  local script
+  test -d ~/.config/gut && {
+    while read script; do
+      . "$script"
+    done <<< "$(find ~/.config/gut -name '*.sh')"
+  }
+}
+
+installGutScripts
