@@ -21,8 +21,7 @@ faGet() {
   local iconsJsonFilePath="$folderPath/icons.json"
 
   curl 'https://raw.githubusercontent.com/FortAwesome/Font-Awesome/v4.7.0/src/icons.yml' \
-    | yq read - --tojson \
-    | jq '.' \
+    | yq --tojson eval \
     > "$iconsJsonFilePath"
 
 }
