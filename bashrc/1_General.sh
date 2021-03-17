@@ -70,3 +70,7 @@ export ASDF_DIR=~/.asdf
 test -f "$ASDF_DIR/asdf.sh" && { source "$_"; }
 test -f "$ASDF_DIR/completions/asdf.bash" && { source "$_"; }
 
+emo() {
+  local emoji="${1?Missing input}"
+  cbs <<< "$emoji"
+}
