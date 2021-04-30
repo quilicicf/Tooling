@@ -11,19 +11,21 @@
 #         Paths        #
 ########################
 
-export DESKTOP=$HOME'/Desktop'
-export WORK=$HOME'/work'
+export DESKTOP="${HOME}/Desktop"
+export WORK="${HOME}/work"
+
+# Where all my API Definitions are
+export DEFINITIONS="${WORK}/definitions"
 
 # Where all the github repositories are (yes it's assumed they're all in one place)
-export FORGE=$WORK'/forge'
+export FORGE="${WORK}/forge"
 
-export TOOLING=$FORGE'/github/quilicicf/Tooling'
-export BASHRC=$TOOLING'/bashrc'
-export BASHRC_UTILS=$TOOLING'/bashrcUtils'
-export PRIVATE_TOOLING=$FORGE'/github/quilicicf/Private_Tooling'
-export BASHRC_DOC=$HOME'/.bashrcDoc'
+export BASHRC="${TOOLING}/bashrc"
+export BASHRC_DOC="${HOME}/.bashrcDoc"
+export TOOLING="${FORGE}/github/quilicicf/Tooling"
+export PRIVATE_TOOLING="${FORGE}/github/quilicicf/Private_Tooling"
 
-export BASH_PROMPT_PATH=$HOME'/.config/bash-prompt'
+export BASH_PROMPT_PATH="${HOME}/.config/bash-prompt"
 
 ########################
 #       Variables      #
