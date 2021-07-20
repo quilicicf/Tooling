@@ -6,6 +6,10 @@ _parseableDockerPs() {
   docker ps -a --format '{{.ID}}|{{.Image}}|{{.Names}}|{{.Status}}' | tail -n +1
 }
 
+dockerPs() {
+  docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}'
+}
+
 dockerRm() {
   local image containerId name status
 
