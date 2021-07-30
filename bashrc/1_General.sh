@@ -67,8 +67,12 @@ shopt -s checkwinsize
 ###############
 
 export ASDF_DIR=~/.asdf
-test -f "$ASDF_DIR/asdf.sh" && { source "$_"; }
-test -f "$ASDF_DIR/completions/asdf.bash" && { source "$_"; }
+test -s "$ASDF_DIR/asdf.sh" && { source "$_"; }
+test -s "$ASDF_DIR/completions/asdf.bash" && { source "$_"; }
+
+fzfBinPath="$(asdf which fzf)"
+test -s "${fzfBinPath%/bin/fzf}/shell/completion.bash" && { source "$_"; }
+_fzf_setup_completion path micro xo
 
 emo() {
   local emoji="${1?Missing input}"
