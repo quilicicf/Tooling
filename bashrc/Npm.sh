@@ -1,3 +1,15 @@
+# Release a new version of an NPM module, must be run at the root of the repository
+# $1: the version to release
+npmRelease() {
+  local newVersion="${1?Missing new version}"
+
+  npm version "${newVersion}"
+  git push
+  git push --tags
+  npm login
+  npm publish
+}
+
 ###-begin-npm-completion-###
 #
 # npm command completion script
