@@ -70,9 +70,20 @@ export ASDF_DIR=~/.asdf
 test -s "$ASDF_DIR/asdf.sh" && { source "$_"; }
 test -s "$ASDF_DIR/completions/asdf.bash" && { source "$_"; }
 
+############
+# WHATEVER #
+############
+
 fzfBinPath="$(asdf which fzf)"
 test -s "${fzfBinPath%/bin/fzf}/shell/completion.bash" && { source "$_"; }
 _fzf_setup_completion path micro xo
+
+# Parses a CLI's help from stdin and greps the documentation for 
+# one of its parameters out of it.
+manFlag() {
+  local param="${1?Missing parameter name}"
+  grep "\-${param}" -A 5 <<< "$(cat)"
+}
 
 emo() {
   local emoji="${1?Missing input}"
