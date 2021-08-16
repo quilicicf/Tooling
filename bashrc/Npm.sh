@@ -6,7 +6,11 @@ npmRelease() {
   npm version "${newVersion}"
   git push
   git push --tags
-  npm login
+
+  npm whoami &> /dev/null || {
+    npm login
+  }
+  
   npm publish
 }
 
