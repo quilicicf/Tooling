@@ -76,7 +76,7 @@ test -s "$ASDF_DIR/completions/asdf.bash" && { source "$_"; }
 
 fzfBinPath="$(asdf which fzf)"
 test -s "${fzfBinPath%/bin/fzf}/shell/completion.bash" && { source "$_"; }
-_fzf_setup_completion path micro xo
+_fzf_setup_completion path micro xo cbs
 
 # Parses a CLI's help from stdin and greps the documentation for 
 # one of its parameters out of it.
