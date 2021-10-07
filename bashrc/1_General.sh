@@ -70,6 +70,11 @@ export ASDF_DIR=~/.asdf
 test -s "$ASDF_DIR/asdf.sh" && { source "$_"; }
 test -s "$ASDF_DIR/completions/asdf.bash" && { source "$_"; }
 
+test -s "$(asdf which mvnd)-bash-completion.bash" && { source "$_"; }
+if deno --help &> /dev/null; then
+  source <(deno completions bash)
+fi
+
 ############
 # WHATEVER #
 ############
