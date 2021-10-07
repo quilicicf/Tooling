@@ -10,6 +10,11 @@ dockerPs() {
   docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}'
 }
 
+dockerLogs() {
+  local searchText="${1?Missing search text}"
+  docker logs "$(docker ps --format '{{.ID}}\t{{.Image}}\t{{.Names}}' | grep "${searchText}" | awk '{print $1}')"
+}
+
 dockerRm() {
   local image containerId name status
 
