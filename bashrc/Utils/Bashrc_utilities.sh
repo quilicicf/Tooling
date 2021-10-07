@@ -50,7 +50,7 @@ wbashrc() {
 
   local file
   [ "$searchType" = "-c" ] && {
-    files="$(pwd)/$(ag -l "^$1[^\(]*\(")"
+    files="$(pwd)/$(rg -l "^$1[^\(]*\(")"
     [ "$files" = "" ] && { files="$(pwd)/$(ag -l "^alias\\s$1.*")"; }
     xo <<< "$files"
   }
