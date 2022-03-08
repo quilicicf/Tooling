@@ -2,10 +2,10 @@
 # K8s #
 #######
 
-alias k8='kubectl'
+alias k='kubectl'
 
 # Displays or changes the current K8s context
-k8x() {
+kx() {
   local context="$1"
 
   if [[  -n "${context}" ]]; then
@@ -14,3 +14,15 @@ k8x() {
      kubectl config current-context
   fi
 }
+
+kn() (
+  namespace="$1"
+
+  if [[ -n "${namespace}" ]]; then
+    kubectl config set-context --current --namespace "${namespace}"
+  else
+    kubectl config view --minify \
+      | grep 'namespace:' \
+      | cut --delimiter ':' --fields '2'
+  fi
+)
