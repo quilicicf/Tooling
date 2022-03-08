@@ -41,27 +41,6 @@ gdtnm() {
   fi
 }
 
-# Displays the diff between HEAD and HEAD - n with git's diff
-# Uses: gdnm
-# $1: the number of commits to inspect
-gdn() {
-  gdnm "$1" "0"
-}
-
-# Displays the diff between HEAD - n and HEAD - m with git's diff
-# Uses: readInt, readVar
-# $1: the distance in the commit history of the oldest commit (default: 1)
-# $2: the distance in the commit history of the newest commit (default: 0)
-gdnm() {
-  n=$(readVar 1 "$1" "[1-9][0-9]*")
-  m=$(readInt 0 "$2")
-  if [ "$m" = "0" ]; then
-    git diff "HEAD~$n..HEAD"
-  else
-    git diff "HEAD~$n..HEAD~$m"
-  fi
-}
-
 # Displays the history of a file
 # $1: search pattern (fed to find)
 gkf() {
