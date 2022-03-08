@@ -7,7 +7,7 @@ _parseableDockerPs() {
 }
 
 dockerPs() {
-  docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}'
+  docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}' "$@"
 }
 
 dockerLogs() {
