@@ -61,3 +61,8 @@ dateISO() {
 dateAllNumbers() {
   date +"%Y%m%d%H%M%S"
 }
+
+# Transforms bytes number to human-readable size
+toHumanDiskSize() (
+  numfmt --to=iec-i --suffix=B --padding=7 "$(cat)"
+)
