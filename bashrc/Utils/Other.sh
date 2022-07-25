@@ -33,7 +33,8 @@ timebox() {
 # Uses: pandoc
 # $1: the name of the file to use
 displaymd() {
-  echo -e "$1" | pandoc -s -f markdown -t html | elinks -dump -dump-color-mode 1
+  pandoc --standalone --from markdown --to html --metadata 'pagetitle=doc' <<< "$1" \
+    | elinks -dump -dump-color-mode 1
 }
 
 # Copies the public SSH key into the clipboard
