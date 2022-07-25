@@ -80,9 +80,8 @@ _showShellCheckReport() (
     printf 'Cannot cd to %s\n' "$_"
     return 1
   }
-  git status -sb \
-    | grep --invert-match "^##" \
-    | grep --invert-match "^D" \
+  git status -s \
+    | grep --invert-match "^ D" \
     | awk '{print $2}' \
     | grep ".*\.sh" \
     | while read -r file; do

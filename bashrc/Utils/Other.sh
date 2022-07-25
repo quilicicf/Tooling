@@ -37,18 +37,19 @@ displaymd() {
     | elinks -dump -dump-color-mode 1
 }
 
-# Copies the public SSH key into the clipboard
-alias pubkey="cat ~/.ssh/id_rsa.pub | cb"
-
 # Give rights on the current folder to logged user
-alias chme="sudo chown -R \$(whoami) "
+chme() (
+  sudo chown --recursive "$(whoami)"
+)
 
 # Give execution rights on the given file
-alias chx="chmod +x"
+chx() (
+  chmod +x
+)
 
 # Copies the current path to the clipboard
-# Uses: cb
-cpdir() {
+# Uses: cbs
+cpDir() {
   pwd | cbs
 }
 
@@ -57,22 +58,22 @@ cpdir() {
 # $2: the regex
 # $3: the group number
 # $4: the default value (Optional)
-extract() {
-  local callerFn="${FUNCNAME[1]}"
-  local value="${1?Missing value to extract from}"
-  local regex="${2?Missing regex}"
-  local group="${3?Missing group number}"
-  local default="$4"
+extract() (
+  callerFn="${FUNCNAME[1]}"
+  value="${1?Missing value to extract from}"
+  regex="${2?Missing regex}"
+  group="${3?Missing group number}"
+  default="$4"
 
-  if [[ "$value" =~ $regex ]]; then
-    EXTRACTED="$(jsonSet ".$callerFn" "${BASH_REMATCH[$group]}" "string" <<< "$EXTRACTED")"
+  if [[ "${value}" =~ $regex ]]; then
+    EXTRACTED="$(jsonSet ".${callerFn}" "${BASH_REMATCH[${group}]}" "string" <<< "${EXTRACTED}")"
     return 0
 
   else
-    if [ -n "$default" ]; then
-      EXTRACTED="$(jsonSet ".$callerFn" "$default" "string" <<< "$EXTRACTED")"
+    if [[ -n "${default}" ]]; then
+      EXTRACTED="$(jsonSet ".${callerFn}" "${default}" "string" <<< "${EXTRACTED}")"
     else
       return 1
     fi
   fi
-}
+)

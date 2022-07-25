@@ -2,45 +2,62 @@
 # Screens #
 #---------#
 
-_gnomeShowTopPanel() {
-  gnome-shell-extension-tool -d hide-top-panel@dimka665.gmail.com
-}
+# Example configuration:
+#{
+#  "o": {
+#    "left": {
+#      "name": "DP-2",
+#      "mode": "1920x1080",
+#      "rate": 60.00
+#    },
+#    "right": {
+#      "name": "DP-1",
+#      "mode": "1920x1200",
+#      "rate": 59.95
+#    }
+#  }
+#}
+export SCREENS_CONFIG_PATH=~/.screensConfig.json
 
-_gnomeHideTopPanel() {
-  gnome-shell-extension-tool -e hide-top-panel@dimka665.gmail.com
-}
+xr() (
+  mode="${1?Missing mode}"
 
-gnomeHideTopPanel() {
-  _gnomeShowTopPanel
-  _gnomeHideTopPanel
-}
-
-_screenOffice() {
-  xrandr \
-    --output 'DP-3'   --pos '1920x0' --auto --rate '59.950172424316406' \
-    --output 'HDMI-2' --pos '0x0'    --auto --rate '59.950172424316406' --primary
-}
-
-_screenTargus() {
-  xrandr \
-    --output 'DVI-I-2-1'  --pos '1920x0' --auto --rate '60' \
-    --output 'DVI-I-3-2'  --pos '0x0'    --auto --rate '59.95' --primary
-}
-
-_screenLaptop() {
-  xrandr --output 'eDP-1'   --pos '0x0' --auto --rate '60' --primary
-}
-
-screens() {
-  local disposition="${1:--o}"
-
-  if [[ "$disposition" = '-o' ]]; then
-    _screenOffice
-  elif [[ "$disposition" = '-t' ]]; then
-    _screenTargus
-  elif [[ "$disposition" = '-l' ]]; then
-    _screenLaptop
+  if [[ ! -f "${SCREENS_CONFIG_PATH}" ]]; then
+    printf 'Screens configuration file missing: %s\n' "${SCREENS_CONFIG_PATH}"
+    return 1
   fi
 
-  gnomeHideTopPanel
-}
+  location="${mode:0:1}"
+  locationConfig="$(jq ".${location}" --compact-output < "${SCREENS_CONFIG_PATH}")"
+
+  if [[ ! "$(jq 'type' --raw-output <<< "${locationConfig}")" == 'object' ]]; then
+    printf 'Unknown mode location %s\n' "${location}"
+    return 1
+  fi
+
+  leftConfig="$(jq '.left' <<< "${locationConfig}")"
+  leftName="$(jq '.name' --raw-output <<< "${leftConfig}")"
+  leftMode="$(jq '.mode' --raw-output <<< "${leftConfig}")"
+  leftRate="$(jq '.rate' --raw-output <<< "${leftConfig}")"
+
+  rightConfig="$(jq '.right' <<< "${locationConfig}")"
+  rightName="$(jq '.name' --raw-output <<< "${rightConfig}")"
+  rightMode="$(jq '.mode' --raw-output <<< "${rightConfig}")"
+  rightRate="$(jq '.rate' --raw-output <<< "${rightConfig}")"
+
+  activity="${mode:1:1}"
+  if [[ "${activity}" == 'w' ]]; then
+    xrandr \
+      --output "${leftName}" --primary --mode "${leftMode}" --rate "${leftRate}" \
+      --output "${rightName}" --mode "${rightMode}" --rate "${rightRate}" --right-of "${leftName}"
+
+  elif [[ "${activity}" == 'g' ]]; then
+    xrandr \
+      --output "${leftName}" --off \
+      --output "${rightName}" --mode "${rightMode}" --rate "${rightRate}" --primary
+
+  else
+    printf 'Unknown mode activity %s\n' "${activity}"
+    return 1
+  fi
+)
