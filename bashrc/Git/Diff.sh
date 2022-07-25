@@ -2,45 +2,6 @@
 # Diff #
 #------#
 
-# Displays the beautified status of the current branch changes
-gstu() {
-  git status -sb
-}
-
-# Alias to git stash
-alias gsth="git stash"
-
-# Alias to git difftool
-gdt(){
-  launch -d -p "git difftool -d HEAD"
-}
-
-# Displays the diff between HEAD and HEAD - n with the favorite difftool
-# Uses: gdtnm
-# $1: the number of commits to inspect
-gdtn() {
-  local commitsNumber="$1"
-  shift
-  gdtnm "$commitsNumber" "0" "$@"
-}
-
-# Displays the diff between HEAD - n and HEAD - m with the favorite difftool
-# Uses: readInt, readVar
-# $1: the distance in the commit history of the oldest commit (default: 1)
-# $2: the distance in the commit history of the newest commit (default: 0)
-gdtnm() {
-  local n m
-  n=$(readVar 1 "$1" "[1-9][0-9]*")
-  shift
-  m=$(readInt 0 "$1")
-  shift
-  if [[ "$m" = "0" ]]; then
-    git difftool -d "HEAD~$n..HEAD" "$@"
-  else
-    git difftool -d "HEAD~$n..HEAD~$m" "$@"
-  fi
-}
-
 # Displays the history of a file
 # $1: search pattern (fed to find)
 gkf() {
