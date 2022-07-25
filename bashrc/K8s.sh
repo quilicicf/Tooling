@@ -23,6 +23,7 @@ kn() (
   else
     kubectl config view --minify \
       | grep 'namespace:' \
-      | cut --delimiter ':' --fields '2'
+      | cut --delimiter ':' --fields '2' \
+      | tr --delete ' '
   fi
 )
