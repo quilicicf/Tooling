@@ -95,12 +95,33 @@ installFzf() {
 
 installFzf
 
-# Parses a CLI's help from stdin and greps the documentation for 
+# Parses a CLI's help and greps the documentation for 
 # one of its parameters out of it.
-manFlag() {
-  local param="${1?Missing parameter name}"
-  grep "\-${param}" -A 5 <<< "$(cat)"
-}
+manFlag() (
+  command="${1?Missing command}"
+  param="${2?Missing parameter name}"
+
+  if [[ "${#param}" -eq '1' ]]; then
+    search="\-${param},"
+  else
+    search="\-\-${param}"
+  fi
+
+  if man "${command}" &> /dev/null; then
+    man "${command}" | grep "${search}" --after 5
+    
+  elif eval "${command} --help" &> /dev/null; then
+    eval "${command} --help" | grep "${search}" --after 5
+
+  elif "${command} help" &> /dev/null; then
+    eval "${command} help" | grep "${search}" --after 5
+    
+  else
+    printf 'Could not find help using: ["%s", "%s", "%s" ]\n' \
+      "man ${command}" "${command} --help" "${command} help"
+    return 1
+  fi
+)
 
 emo() {
   local emoji="${1?Missing input}"
