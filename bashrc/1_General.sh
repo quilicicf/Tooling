@@ -102,18 +102,18 @@ manFlag() (
   param="${2?Missing parameter name}"
 
   if [[ "${#param}" -eq '1' ]]; then
-    search="\-${param},"
+    search="^[ ]*\-${param}"
   else
-    search="\-\-${param}"
+    search="^[ ]*\-\-${param}"
   fi
 
-  if man "${command}" &> /dev/null; then
+  if man "${command}" 2> /dev/null | grep --silent "${search}"; then
     man "${command}" | grep "${search}" --after 5
     
-  elif eval "${command} --help" &> /dev/null; then
+  elif eval "${command} --help" 2> /dev/null | grep --silent "${search}"; then
     eval "${command} --help" | grep "${search}" --after 5
 
-  elif "${command} help" &> /dev/null; then
+  elif "${command} help" 2> /dev/null | grep --silent "${search}"; then
     eval "${command} help" | grep "${search}" --after 5
     
   else
