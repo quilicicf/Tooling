@@ -41,5 +41,5 @@ cbo2() {
 _openOrCreate() (
   path="${1?Missing file path}"
   [[ -f "${path}" ]] || { touch "${path}"; }
-  xo "${path}"
+  micro "${path}"
 )
