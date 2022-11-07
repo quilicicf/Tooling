@@ -37,9 +37,9 @@ displaymd() {
     | elinks -dump -dump-color-mode 1
 }
 
-# Give rights on the current folder to logged user
+# Give ownership to logged user
 chme() (
-  sudo chown --recursive "$(whoami)"
+  sudo chown --recursive "$(whoami):$(whoami)" "$@"
 )
 
 # Give execution rights on the given file
