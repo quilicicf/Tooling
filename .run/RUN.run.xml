@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="RUN" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="fr.quilicicf.bashrc.Main" />
+    <module name="bashrc-builder" />
+    <option name="PROGRAM_PARAMETERS" value="--path $PROJECT_DIR$/bashrc --secretPath $PROJECT_DIR$/../Private_Tooling/bashrc build rtfm" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="fr.quilicicf.bashrc.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

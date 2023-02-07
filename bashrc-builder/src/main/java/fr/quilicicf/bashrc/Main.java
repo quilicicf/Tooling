@@ -3,6 +3,11 @@ package fr.quilicicf.bashrc;
 import fr.quilicicf.bashrc.build.BashrcBuilder;
 import fr.quilicicf.bashrc.parser.AbstractBashrcParser;
 import fr.quilicicf.bashrc.rtfm.RtfmGenerator;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -11,14 +16,9 @@ import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-
 import static java.nio.file.Files.exists;
 
-public class BashrcUtils {
+public class Main {
 
     public static Path BASHRC_REFINED = Paths.get(System.getProperty("user.home") + "/.bashrc");
 

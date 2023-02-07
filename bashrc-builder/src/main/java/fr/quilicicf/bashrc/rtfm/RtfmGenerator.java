@@ -5,17 +5,17 @@ import fr.quilicicf.bashrc.parser.AbstractBashrcParser;
 import fr.quilicicf.bashrc.parser.MethodDescription;
 import fr.quilicicf.bashrc.parser.ParserType;
 import fr.quilicicf.bashrc.parser.ParsingState;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import static fr.quilicicf.bashrc.BashrcUtils.DOC_PATH;
-import static fr.quilicicf.bashrc.BashrcUtils.endProgram;
+import static fr.quilicicf.bashrc.Main.DOC_PATH;
+import static fr.quilicicf.bashrc.Main.endProgram;
 import static fr.quilicicf.bashrc.parser.ParserType.DOC;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -198,7 +198,7 @@ public class RtfmGenerator extends AbstractBashrcParser {
         path += "/" + methodName + ".doc";
         final Path doc = Paths.get(path);
 
-        try (BufferedWriter w = newBufferedWriter(doc, UTF_8, CREATE)) {
+        try (final BufferedWriter w = newBufferedWriter(doc, UTF_8, CREATE)) {
 
             w.write("## __" + methodName + "__\n");
             w.write("  " + methodDescription.getDescription() + "\n\n");

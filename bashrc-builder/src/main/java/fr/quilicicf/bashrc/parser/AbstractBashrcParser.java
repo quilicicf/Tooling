@@ -1,8 +1,7 @@
 package fr.quilicicf.bashrc.parser;
 
-import fr.quilicicf.bashrc.BashrcUtils;
+import fr.quilicicf.bashrc.Main;
 import fr.quilicicf.bashrc.ProgramEnder;
-import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -17,9 +16,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static fr.quilicicf.bashrc.BashrcUtils.endProgram;
+import static fr.quilicicf.bashrc.Main.endProgram;
 import static java.lang.String.format;
 import static java.nio.file.FileVisitResult.CONTINUE;
 import static java.nio.file.Files.createDirectories;
@@ -66,7 +66,7 @@ public abstract class AbstractBashrcParser {
         final Path directory = Paths.get(path);
         if (exists(directory)) {
             try {
-                walkFileTree(directory, new SimpleFileVisitor<Path>() {
+                walkFileTree(directory, new SimpleFileVisitor<>() {
                     @Override
                     public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
                         delete(dir);
@@ -138,7 +138,7 @@ public abstract class AbstractBashrcParser {
         if (m.matches()) {
             return m.group(2);
         }
-        BashrcUtils.endProgram(format("Could not find directory for Path: '%s'", path));
+        Main.endProgram(format("Could not find directory for Path: '%s'", path));
         return null;
     }
 

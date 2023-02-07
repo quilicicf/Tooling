@@ -4,16 +4,16 @@ import com.google.common.base.Joiner;
 import fr.quilicicf.bashrc.parser.AbstractBashrcParser;
 import fr.quilicicf.bashrc.parser.ParserType;
 import fr.quilicicf.bashrc.parser.ParsingState;
-import org.slf4j.Logger;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
 
-import static fr.quilicicf.bashrc.BashrcUtils.BASHRC_REFINED;
-import static fr.quilicicf.bashrc.BashrcUtils.endProgram;
+import static fr.quilicicf.bashrc.Main.BASHRC_REFINED;
+import static fr.quilicicf.bashrc.Main.endProgram;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.delete;
@@ -112,7 +112,7 @@ public class BashrcBuilder extends AbstractBashrcParser {
             }
         }
 
-        try (BufferedWriter w = newBufferedWriter(BASHRC_REFINED, UTF_8, CREATE_NEW)) {
+        try (final BufferedWriter w = newBufferedWriter(BASHRC_REFINED, UTF_8, CREATE_NEW)) {
 
             w.write(Joiner.on("\n").join(parsedLines));
         } catch (final Exception e) {

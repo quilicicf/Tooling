@@ -105,22 +105,22 @@ brcbuild() (
     return 1
   fi
 
-  BASHRC_UTILS="${TOOLING}/bashrcUtils"
-  current_version="$(< "${BASHRC_UTILS}/version.txt")"
-  jar="${BASHRC_UTILS}/target/bashrcUtils-${current_version}-jar-with-dependencies.jar"
+  BASHRC_BUILDER="${TOOLING}/bashrc-builder"
+  current_version="$(< "${BASHRC_BUILDER}/version.txt")"
+  jar="${BASHRC_BUILDER}/target/bashrc-builder-cli-${current_version}.jar"
 
   [[ -f "${jar}" ]] || (
-    cd "${TOOLING}/bashrcUtils" || {
+    cd "${BASHRC_BUILDER}" || {
       printf 'Cannot cd to %s\n' "$_"
       return 1
     }
     printfc "Jar not found, building it for version ${current_version}\n" "${CYAN}"
-    mvn 'assembly:assembly' --define "revision=${current_version}" || {
-      printfc 'Could not generate the jar for bashrcUtils.' "${RED}"
+    mvn package --define "revision=${current_version}" || {
+      printfc 'Could not generate bashrc-builder jar.' "${RED}"
       return 1
     }
   )
 
-  printfc "Building with bashrcUtils version ${current_version}\n" "${CYAN}"
+  printfc "Building with bashrc-builder version ${current_version}\n" "${CYAN}"
   javar "${jar}" -p "${BASHRC}" -s "${PRIVATE_TOOLING}/bashrc" build rtfm "$@"
 )
