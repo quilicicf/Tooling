@@ -13,75 +13,72 @@ esac
 
 # Builds a beautiful PS1 using a CSV-generated config file
 # Uses: $BASH_PROMPT_PATH, $TOOLING, ps1, ps1_config, splitAndGet, colorGetCode, colorSwitch, colorReset
-promptBuild() {
-  local config_path="$TOOLING/bash-prompt/ps1_config"
-  local style foreground background cmd condition
-  if [ -f "$config_path" ]; then
-    local ps1=""
-    local first="true"
-    local before bebefore afafter after thething
+promptBuild() (
+  config_path="${TOOLING}/bash-prompt/ps1_config"
+  if [[ -f "${config_path}" ]]; then
+    ps1=''
+    first='true'
     IFS=$'\n'
 
     while read -r line; do
+      style="$(splitAndGet "${line}" ',' '1')"
+      foreground="$(splitAndGet "${line}" ',' '2')"
+      background="$(splitAndGet "${line}" ',' '3')"
+      cmd="$(splitAndGet "${line}" ',' '4')"
+      condition="$(splitAndGet "${line}" ',' '5')"
 
-      style=$(splitAndGet "$line" "," "1")
-      foreground=$(splitAndGet "$line" "," "2")
-      background=$(splitAndGet "$line" "," "3")
-      cmd=$(splitAndGet "$line" "," "4")
-      condition=$(splitAndGet "$line" "," "5")
-
-      if [ "$first" == "true" ]; then
-        first="false"
+      if [[ "${first}" == 'true' ]]; then
+        first='false'
       else
-        before="$(colorGetCode -b "$background")m\]"
+        before="$(colorGetCode -b "${background}")m\]"
       fi
 
-      if [ "$condition" != "true" ]; then
-        bebefore="\$(if $condition;then echo \""
-        afafter="\"; else echo ""; fi;)"
+      if [[ "${condition}" != 'true' ]]; then
+        grandBefore="\$(if ${condition};then echo \""
+        grandAfter="\"; else echo ""; fi;)"
 
       else
-        bebefore=""
-        afafter=""
+        grandBefore=''
+        grandAfter=''
       fi
 
-      thething="$(colorSwitch "$style" "$foreground" "$background") $cmd "
-      after="\[\e[0;$(colorGetCode -f "$background");"
+      theThing="$(colorSwitch "${style}" "${foreground}" "${background}") ${cmd} "
+      after="\[\e[0;$(colorGetCode -f "${background}");"
 
-      ps1="$ps1""$bebefore""$before""$thething""$after""$afafter"
-    done < "$config_path"
+      ps1="${ps1}${grandBefore}${before}${theThing}${after}${grandAfter}"
+    done < "${config_path}"
 
-    ps1="$ps1""49m\]$(colorReset)"
-    echo "$ps1" > "$BASH_PROMPT_PATH/ps1"
+    ps1="${ps1}49m\]$(colorReset)"
+    printf '%s\n' "${ps1}" > "${BASH_PROMPT_PATH}/ps1"
   else
-    echo "The config file $config_path was not found"
+    printf 'The config file %s was not found\n' "${config_path}"
   fi
-}
+)
 
 # Beautiful prompt
-PROMPT_COMMAND="RET=\$?;$PROMPT_COMMAND"
+PROMPT_COMMAND="RET=\$?;${PROMPT_COMMAND}"
 
-# Allows direnv to work. It loads .envrc when cding
+# Allows direnv to work. It loads .envrc when performing a cd
 direnv &> /dev/null && { eval "$(direnv hook bash)"; }
 
 # if [ "${BASH_VERSINFO[0]}" -gt 4 ] || ([ "${BASH_VERSINFO[0]}" -eq 4 ] && [ "${BASH_VERSINFO[1]}" -ge 1 ]); then
-#   source <("/home/cyp/.asdf/installs/rust/stable/bin/starship" init bash --print-full-init)
+#   source <("${HOME}/.asdf/installs/rust/stable/bin/starship" init bash --print-full-init)
 # else
-#   source /dev/stdin <<<"$("/home/cyp/.asdf/installs/rust/stable/bin/starship" init bash --print-full-init)"
+#   source /dev/stdin <<<"$("${HOME}/.asdf/installs/rust/stable/bin/starship" init bash --print-full-init)"
 # fi
 
 
 RET_VAL_COLOR="\$(if [[ \$RET -ne 0 ]]; then echo -ne \" \033[0;31m[\$RET]\033[0m \"; else echo -ne \"\"; fi;)"
 
-if [ -f "$BASH_PROMPT_PATH/ps1" ]; then
-  BASH_PROMPT=$(cat "$BASH_PROMPT_PATH/ps1")
+if [[ -f "${BASH_PROMPT_PATH}/ps1" ]]; then
+  BASH_PROMPT="$(< "${BASH_PROMPT_PATH}/ps1")"
 else
   BASH_PROMPT="${RET_VAL_COLOR}\[\e[0;33m\]$(whoami)\[\e[0;36m\]:\w\[\e[0;35m\]\$(__git_ps1 \"(\%s)\")\n\[\e[0;32m\](\$(/bin/ls -1 | /usr/bin/wc -l | /bin/sed 's: ::g') files, \$(/bin/ls -lah | /bin/grep -m 1 total | /bin/sed 's/total //')b)\[\e[0;39m\]"
 fi
-[ -n "$PS1" ] && PS1="$BASH_PROMPT\n$FUNNY_PROMPT\[\e[0;39m\] "
+[[ -n "${PS1}" ]] && PS1="${BASH_PROMPT}\n${FUNNY_PROMPT}\[\e[0;39m\] "
 
-printGitInformation() {
-  local lock=''
+printGitInformation() (
+  lock=''
   gbIsSafeBranch && { lock=''; }
-  printf ' %s%s' "$lock" "$(echoc "$PS12")"
-}
+  printf ' %s%s' "${lock}" "$(echoc "${PS12}")"
+)
