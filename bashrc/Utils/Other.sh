@@ -43,9 +43,7 @@ chme() (
 )
 
 # Give execution rights on the given file
-chx() (
-  chmod +x
-)
+alias chx='chmod +x'
 
 # Copies the current path to the clipboard
 # Uses: cbs
