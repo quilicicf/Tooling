@@ -5,15 +5,20 @@
 alias k='kubectl'
 
 # Displays or changes the current K8s context
-kx() {
-  local context="$1"
+kx() (
+  if command -v kubectx &> /dev/null; then
+    kubectx "$@"
+    return "$?"
+  fi
+
+  context="$1"
 
   if [[  -n "${context}" ]]; then
      kubectl config use-context "${context}"
   else
-     kubectl config current-context
+     kubectl config get-contexts
   fi
-}
+)
 
 kn() (
   namespace="$1"
