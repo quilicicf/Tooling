@@ -82,7 +82,7 @@ fi
 installFzf() {
   fzfBinPath="$(asdf which fzf)"
   test -s "${fzfBinPath%/bin/fzf}/shell/completion.bash" && { source "$_"; }
-  _fzf_setup_completion path micro xo cbs
+  _fzf_setup_completion path 'micro' 'xo' 'cbs' 'bash'
 
   local colors=(
     '--color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9'
