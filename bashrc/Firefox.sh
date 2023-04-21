@@ -9,8 +9,9 @@ firefoxUpdate() (
   cd /tmp
   wget \
     --output-document "${archiveName}" \
-    'https://download.mozilla.org/?product=firefox-devedition-latest-ssl&os=linux64'
+    'https://download.mozilla.org/?product=firefox-devedition-latest-ssl&os=linux64&lang=en-US'
   sudo tar --extract --verbose --file "${archiveName}"
   sudo rm -rf "${installationPath}"
   sudo mv 'firefox' "${installationPath}"
+  rm "/tmp/${archiveName}"
 )
