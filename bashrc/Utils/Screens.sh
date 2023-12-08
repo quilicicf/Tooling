@@ -27,7 +27,20 @@ xr() (
     return 1
   fi
 
-  location="${mode:0:1}"
+  if [[ "${#mode}" -eq '1' ]]; then
+    location='d'
+    activity="$1"
+    
+  elif [[ "${#mode}" -eq '2' ]]; then
+    location="${mode:0:1}"
+    activity="${mode:1:1}"
+  
+  else
+    printf 'Invalid mode: %s\n' "${mode}"
+  fi
+
+
+  printf 'Applying config: {"location": "%s", "activity": "%s"}\n' "${location}" "${activity}"
   locationConfig="$(jq ".${location}" --compact-output < "${SCREENS_CONFIG_PATH}")"
 
   if [[ ! "$(jq 'type' --raw-output <<< "${locationConfig}")" == 'object' ]]; then
@@ -45,7 +58,6 @@ xr() (
   rightMode="$(jq '.mode' --raw-output <<< "${rightConfig}")"
   rightRate="$(jq '.rate' --raw-output <<< "${rightConfig}")"
 
-  activity="${mode:1:1}"
   if [[ "${activity}" == 'w' ]]; then
     xrandr \
       --output "${leftName}" --primary --mode "${leftMode}" --rate "${leftRate}" \
