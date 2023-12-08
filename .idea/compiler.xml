@@ -10,7 +10,6 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="bashrc-builder" target="17" />
       <module name="bashrcUtils" target="17" />
     </bytecodeTargetLevel>
   </component>
