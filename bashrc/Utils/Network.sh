@@ -2,6 +2,8 @@
 # Network #
 #---------#
 
+alias wifiCode='nmcli dev wifi show-password'
+
 # Displays information about the network configuration
 netInfo() (
   printf '%s\n' '--------------- Network Information ---------------'
