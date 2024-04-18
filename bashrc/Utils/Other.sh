@@ -75,3 +75,20 @@ extract() (
     fi
   fi
 )
+
+segment() (
+  [[ -t 0 ]] && input="${1:?Missing input}"
+  [[ -z "${input}" ]] && input="$(cat)"
+  segmentSize="${2:-3}"
+
+  inputSize="$(wc -c <<< "${input}")"
+  for ((i=0; i<inputSize; i++)); do
+    if [[ i -eq '0' ]]; then
+      printf '%s' "${input:$i:1}"
+    elif (( i % segmentSize )); then
+      printf '%s' "${input:$i:1}"
+    else
+      printf ' %s' "${input:$i:1}"
+    fi
+  done
+)
