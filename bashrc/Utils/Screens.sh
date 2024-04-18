@@ -44,7 +44,7 @@ xr() (
   locationConfig="$(jq ".${location}" --compact-output < "${SCREENS_CONFIG_PATH}")"
 
   if [[ ! "$(jq 'type' --raw-output <<< "${locationConfig}")" == 'object' ]]; then
-    printf 'Unknown mode location %s\n' "${location}"
+    printf 'Unknown location %s\n' "${location}"
     return 1
   fi
 
