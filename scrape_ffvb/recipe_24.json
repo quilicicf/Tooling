@@ -1,0 +1,71 @@
+{
+  "ingester": {
+    "id": "CSV",
+    "displayName": "CSV ingester",
+    "options": {
+      "delimiter": ";"
+    }
+  },
+  "preparations": [
+    {
+      "id": "FILTER",
+      "options": {
+        "regex": "AILES SP BOUGUENAIS REZE",
+        "fieldsToInspect": [
+          "EQA_nom",
+          "EQB_nom"
+        ]
+      }
+    },
+    {
+      "id": "INVERTED_FILTER",
+      "options": {
+        "regex": "xxx",
+        "fieldsToInspect": [
+          "EQA_nom",
+          "EQB_nom"
+        ]
+      }
+    },
+    {
+      "id": "COMPOSITION",
+      "options": {
+        "composedFieldName": "summary",
+        "pattern": "%{EQA_nom} reçoit %{EQB_nom}"
+      }
+    },
+    {
+      "id": "COMPOSITION",
+      "options": {
+        "composedFieldName": "start",
+        "pattern": "%{Date} %{Heure}"
+      }
+    },
+    {
+      "id": "PARSE_DATE",
+      "options": {
+        "field": "start",
+        "format": "yyyy-MM-dd HH:mm"
+      }
+    },
+    {
+      "id": "ADD_TIME",
+      "options": {
+        "field": "start",
+        "newField": "end",
+        "unit": "HOURS",
+        "amount": 2
+      }
+    },
+    {
+      "id": "ICAL",
+      "options": {
+        "summary": "summary",
+        "dtstart": "start",
+        "dtend": "end",
+        "location": "Salle",
+        "description": "SKIP_THIS_FIELD"
+      }
+    }
+  ]
+}
