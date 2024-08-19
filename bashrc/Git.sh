@@ -31,3 +31,9 @@ test -f "$FORGE/github/git/git/contrib/completion/git-prompt.sh" && . "$_"
 git_branch_simple() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
 }
+
+
+git_undelete() {
+  file="${1?Missing file to undelete}"
+  git checkout $(git rev-list -n 1 HEAD -- "$file")^ -- "$file"
+}
