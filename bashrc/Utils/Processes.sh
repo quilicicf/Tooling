@@ -72,14 +72,10 @@ _signalResult() (
   color="${2?Missing text color}"
   message="${3?Missing message}"
 
+  printfc "${message}\n" "${color}"
   if [[ -f "${mp3}" ]]; then
-    soundMute
-    printf 'Playing %s\n' "$(basename "${mp3}")"
-    mplayer "${mp3}" -softvol -volume 200 &> /dev/null
-    soundUnmute
+    vlc --intf dummy "${mp3}" vlc://quit &> /dev/null
   else
     printfc "Sound ${mp3} not found!" "${RED}"
   fi
-
-  printfc "${message}\n" "${color}"
 )
