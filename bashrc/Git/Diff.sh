@@ -3,21 +3,21 @@
 #------#
 
 # Displays the history of a file
-# $1: search pattern (fed to find)
-gkf() {
-  local pattern="${1?Missing search pattern}"
-  local files filesNumber
-  files="$(find . -name "$pattern" | grep -v target)"
-  filesNumber="$(wc -l <<< "$files")"
+# $1: search pattern (fed to fd)
+gkf() (
+  pattern="${1?Missing search pattern}"
+  files="$(fd "${pattern}")"
+  filesNumber="$(wc -l <<< "${files}")"
 
-  if [ "$filesNumber" = "1" ]; then
-    gitk --all "$files" &
+  if [[ "${filesNumber}" == "1" ]]; then
+    printf 'Found file %s\n' "${files}"
+    gitk --all "${files}" &
 
   else
-    printfc "Expected 1 file with pattern '$pattern', found $filesNumber." "$RED"
+    printfc "Expected 1 file with pattern '${pattern}', found ${filesNumber}:\n${files}" "$RED"
     exit 1
   fi
-}
+)
 
 # Opens gitk with all branches
 # Uses: gitk
