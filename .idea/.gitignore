@@ -4,3 +4,5 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+# Material theme plugin settings
+/material_theme_project_new.xml
