@@ -14,6 +14,28 @@ sshCreateKey() (
   ssh-add "${filePath}"
 )
 
+sshGrep() (
+  search="${1:?Missing search text}"
+  mapfile -t lines < <(grep -E "^Host .*${search}" ~/.ssh/config)
+  if [[ "${#lines[@]}" == 0 ]]; then
+    printf 'No match found\n'
+    return 1
+    
+  elif [[ "${#lines[@]}" == 1 ]]; then
+    [[ "${lines[0]}" =~ ^Host\ *([^\ ]*) ]]
+    firstAlias="${BASH_REMATCH[1]}"
+    printf 'Match : %s\n' "${lines[0]}"
+    printf 'SSHing : %s\n' "${firstAlias}"
+    ssh "${firstAlias}"
+    return 0
+
+  else
+    printf 'Too many matches :\n'
+    printf ' * %s\n' "${lines[@]}"
+    return 1
+  fi
+)
+
 sshTunnelBdd() (
   localPort="${1:?Missing local port}"
   remotePort="${2:?Missing remote port}"
