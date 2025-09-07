@@ -1,6 +1,10 @@
 # Tooling
 My everyday automation
 
+## 🚨 Migrated to codeberg
+
+De-GAFAMization in process, [new repository available here](https://codeberg.org/quilicicf/tooling).
+
 ## What is it ?
 
 It started as a challenge to become self-taught in bash as it's IMO a talent a software engineer MUST have in his toolbox. It's now become a important part of my comfy dev setup and the bash part is not a requirement anymore
